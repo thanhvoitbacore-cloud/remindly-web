@@ -1,0 +1,165 @@
+"use server";
+
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+
+/**
+ * MOCK AI SCHEDULING LOGIC
+ * Abstract Server Action that aggregates all known events for internal users matching the provided emails,
+ * and computationally suggests a 1-hour "Free Time" window in the nearest 7-day future.
+ */
+export async function suggestMeetingTimes(participantEmails: string[]) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    // Lọc ra các Participants trùng hợp Email trong hệ thống (Loại trừ bản thân mình tạm vì cần Focus người được mời)
+    // Nhưng để tìm Time chung chúng ta cần Query Event của MỌI NGƯỜI (bao gồm cả mình)
+    const allEmails = [...participantEmails, session.user.email].filter(Boolean) as string[];
+
+    // Kéo sạch Event Upcoming thuộc về danh sách Users trên (Từ hôm nay đến 7 ngày tới)
+    const now = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(now.getDate() + 7);
+
+    const conflictingEvents = await prisma.event.findMany({
+        where: {
+            owner: {
+                email: { in: allEmails }
+            },
+            startTime: { gte: now },
+            endTime: { lte: nextWeek },
+            isDraft: false
+        },
+        select: { startTime: true, endTime: true, owner: { select: { email: true } } }
+    });
+
+    // Mô phỏng AI Phân tích Lịch - Quét khung giờ Hành chính 9:00 AM -> 5:00 PM tuần tự
+    const suggestions: Date[] = [];
+    const searchDate = new Date();
+    searchDate.setHours(9, 0, 0, 0);
+
+    // AI Check liên tiếp trong vòng 3 ngày tới tìm 2 slot rảnh đầu tiên
+    for (let dayOffset = 1; dayOffset <= 3; dayOffset++) {
+        searchDate.setDate(now.getDate() + dayOffset);
+
+        for (let hour = 9; hour <= 16; hour++) {
+            const slotStart = new Date(searchDate);
+            slotStart.setHours(hour, 0, 0, 0);
+
+            const slotEnd = new Date(searchDate);
+            slotEnd.setHours(hour + 1, 0, 0, 0);
+
+            // Kiểm tra collision (Xung đột) với tập `conflictingEvents`
+            const hasCollision = conflictingEvents.some(event => {
+                const eventStart = new Date(event.startTime);
+                const eventEnd = new Date(event.endTime);
+                // Bất kì giao diện thời gian nào đâm chéo
+                return (slotStart < eventEnd && slotEnd > eventStart);
+            });
+
+            // Nếu không bị conflict ai bị vướng lịch, thả Slot này vào bảng gợi ý AI
+            if (!hasCollision) {
+                suggestions.push(slotStart);
+                if (suggestions.length >= 3) break; // Chỉ cần offer 3 Options là đủ
+            }
+        }
+        if (suggestions.length >= 3) break;
+    }
+
+    if (suggestions.length === 0) {
+        return { success: false, error: "Tất cả các thành viên đều quá bận rộn trong tuần tới. AI không tìm thấy khe hở chung. Vui lòng xếp lịch thủ công." };
+    }
+
+    return { success: true, suggestions: suggestions.map(d => d.toISOString()) };
+}
+
+/**
+ * Lưu Trữ Cuộc Họp mới vào Calendar (DB)
+ */
+export async function createMeetingAction(formData: FormData) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const date = formData.get("date") as string;
+    const startTimeStr = formData.get("startTime") as string;
+    const endTimeStr = formData.get("endTime") as string;
+
+    // Tách Emails người tham gia
+    const rawEmails = formData.get("participants") as string;
+    const participants = rawEmails ? rawEmails.split(",").map(e => e.trim()).filter(Boolean) : [];
+
+    if (!title || !date || !startTimeStr || !endTimeStr) {
+        throw new Error("Vui lòng điền đủ Tên Cuộc Họp, Ngày và Giờ");
+    }
+
+    const startTime = new Date(`${date}T${startTimeStr}`);
+    const endTime = new Date(`${date}T${endTimeStr}`);
+
+    // Để lưu Meeting, ta cần 1 Event làm Parent, và đẩy danh sách Users theo model Meeting
+    const newEvent = await prisma.event.create({
+        data: {
+            title,
+            description,
+            startTime,
+            endTime,
+            priority: "HIGH",
+            categoryTag: "Meeting",
+            isDraft: false,
+            ownerId: session.user.id,
+            source: "local"
+        }
+    });
+
+    // Thả Participants vào Bảng Meeting (Mapping relations)
+    if (participants.length > 0) {
+        await prisma.meeting.createMany({
+            data: participants.map(email => ({
+                eventId: newEvent.id,
+                participantEmail: email,
+                provider: "local",
+                role: "ATTENDEE",
+                rsvpStatus: "PENDING"
+            }))
+        });
+
+        // Bonus: Tự chèn bản thân làm HOST
+        if (session.user.email) {
+            await prisma.meeting.create({
+                data: {
+                    eventId: newEvent.id,
+                    participantEmail: session.user.email,
+                    provider: "local",
+                    role: "HOST",
+                    rsvpStatus: "ACCEPTED" // Mình là chủ phòng thì mặc định accept
+                }
+            });
+        }
+    }
+
+    // Trigger Notification Systems giả lập API Call cho tất cả Participants (Phase 2 core goal)
+    // Sẽ ghim thông báo vào bảng `Notification` Database với các Email khớp User account trong DB
+    const internalMembers = await prisma.user.findMany({
+        where: { email: { in: participants } },
+        select: { id: true, email: true }
+    });
+
+    if (internalMembers.length > 0) {
+        await prisma.notification.createMany({
+            data: internalMembers.map(member => ({
+                userId: member.id,
+                title: `Lời Mời Tham Gia Cuộc Họp: ${title}`,
+                message: `${session.user.name || session.user.email} đang mời bạn tham gia một cuộc họp quan trọng, hãy kiểm tra hệ thống.`,
+                type: "INVITE",
+                isRead: false
+            }))
+        });
+    }
+
+    revalidatePath("/dashboard");
+    revalidatePath("/calendar");
+
+    return { success: true };
+}

@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountStatus {
+  ACTIVE
+  LOCKED
+  PENDING_VERIFICATION
+}
+
+enum RsvpStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  MAYBE
+}
+
+enum Role {
+  HOST
+  ATTENDEE
+}
+
+enum Provider {
+  GOOGLE
+  OUTLOOK
+}
+
+enum AppRole {
+  ADMIN
+  USER
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum NotificationType {
+  SYSTEM
+  INVITE
+  REMINDER
+}
+
+model User {
+  id            String            @id @default(uuid()) @db.Uuid
+  email         String?           @unique
+  phoneNumber   String?           @unique
+  name          String?
+  avatar        String?
+  passwordHash  String?
+  mfaSecret     String?
+  role          AppRole           @default(USER)
+  accountStatus AccountStatus     @default(PENDING_VERIFICATION)
+  autoSyncCalendars Boolean       @default(false)
+  events        Event[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  calendarAccounts CalendarAccount[]
+  notifications Notification[]
+}
+
+model OTPCode {
+  id            String    @id @default(uuid()) @db.Uuid
+  email         String
+  codeHash      String
+  attempts      Int       @default(0)
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+}
+
+model Event {
+  id             String    @id @default(uuid()) @db.Uuid
+  ownerId        String    @db.Uuid
+  owner          User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title          String    @db.VarChar(255)
+  description    String?   @db.Text
+  startTime      DateTime
+  endTime        DateTime
+  location       String?
+  isDraft        Boolean   @default(true)
+  isRecurring    Boolean   @default(false)
+  recurrenceRule String?
+  categoryTag    String?
+  priority       PriorityLevel @default(MEDIUM)
+  externalId     String?
+  source         String    @default("local") // local | google | outlook
+  meetings       Meeting[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Meeting {
+  id               String     @id @default(uuid()) @db.Uuid
+  eventId          String     @db.Uuid
+  event            Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  provider         String     // zoom | google_meet | teams
+  meetingLink      String?
+  participantEmail String
+  rsvpStatus       RsvpStatus @default(PENDING)
+  role             Role       @default(ATTENDEE)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model CalendarAccount {
+  id                 String    @id @default(uuid()) @db.Uuid
+  userId             String    @db.Uuid
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider           Provider
+  externalCalendarId String?
+  accessToken        String?
+  refreshToken       String?
+  expiry             DateTime?
+  lastSyncTime       DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@unique([userId, provider])
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  action    String
+  entityId  String?
+  timestamp DateTime @default(now())
+  ipAddress String?
+  userAgent String?
+}
+
+model Notification {
+  id        String           @id @default(uuid()) @db.Uuid
+  userId    String           @db.Uuid
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String           @db.VarChar(255)
+  message   String           @db.Text
+  type      NotificationType @default(SYSTEM)
+  actionUrl String?
+  metadata  Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
