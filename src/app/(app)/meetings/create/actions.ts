@@ -151,11 +151,11 @@ export async function createMeetingAction(formData: FormData) {
             data: internalMembers.map(member => ({
                 userId: member.id,
                 title: `Lời Mời Tham Gia Cuộc Họp: ${title}`,
-                message: `${session.user.name || session.user.email} đang mời bạn tham gia một cuộc họp quan trọng, hãy kiểm tra hệ thống.`,
+                message: `${session?.user?.name || session?.user?.email} đang mời bạn tham gia một cuộc họp`,
                 type: "INVITE",
                 isRead: false
             }))
-        });
+        })
     }
 
     revalidatePath("/dashboard");
