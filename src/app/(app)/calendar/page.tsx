@@ -16,8 +16,19 @@ export default async function CalendarPage() {
             ownerId: session.user.id,
             isDraft: false
         },
-        include: {
-            meetings: true
+        select: {
+            id: true,
+            title: true,
+            startTime: true,
+            endTime: true,
+            description: true,
+            location: true,
+            priority: true,
+            meetings: {
+                select: {
+                    id: true
+                }
+            }
         }
     });
 
@@ -28,7 +39,7 @@ export default async function CalendarPage() {
         start: e.startTime,
         end: e.endTime,
         description: e.description,
-        type: e.meetings.length > 0 ? "MEETING" : "EVENT",
+        type: (e.meetings.length > 0 ? "MEETING" : "EVENT") as "MEETING" | "EVENT",
         priority: e.priority,
         location: e.location
     }));
