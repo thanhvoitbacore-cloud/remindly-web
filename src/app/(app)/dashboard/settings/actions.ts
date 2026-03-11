@@ -3,18 +3,58 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import crypto from "crypto";
+import fs from "fs/promises";
+import path from "path";
 
-export async function updateProfile(data: { name?: string; avatar?: string }) {
+export async function updateProfile(formData: FormData) {
     const session = await auth();
     if (!session?.user?.id) return { success: false, message: "Unauthorized" };
 
     try {
+        const name = formData.get("name") as string | null;
+        const avatarFile = formData.get("avatarFile") as File | null;
+        
+        const currentUser = await prisma.user.findUnique({
+             where: { id: session.user.id },
+             select: { avatar: true }
+        });
+
+        let newAvatarUrl = currentUser?.avatar;
+
+        if (avatarFile && avatarFile.size > 0) {
+            const ext = avatarFile.name.split('.').pop() || 'png';
+            const filename = `${session.user.id}-${Date.now()}.${ext}`;
+            const uploadDir = path.join(process.cwd(), "public", "avatars");
+            
+            // Ensure directory exists
+            await fs.mkdir(uploadDir, { recursive: true });
+            
+            // Write new file
+            const filePath = path.join(uploadDir, filename);
+            const buffer = Buffer.from(await avatarFile.arrayBuffer());
+            await fs.writeFile(filePath, buffer);
+
+            // Securely delete the old local avatar to save server storage space
+            if (currentUser?.avatar && currentUser.avatar.startsWith("/avatars/")) {
+                try {
+                    // Extract exact filename without query params
+                    const oldPath = currentUser.avatar.split('?')[0];
+                    const absoluteOldPath = path.join(process.cwd(), "public", oldPath);
+                    await fs.unlink(absoluteOldPath);
+                } catch (err) {
+                    console.log("[Notice] Old avatar file not found to delete, skipping.");
+                }
+            }
+
+            // Generate cache-busting URL
+            newAvatarUrl = `/avatars/${filename}?t=${Date.now()}`;
+        }
+
         await prisma.user.update({
             where: { id: session.user.id },
             data: {
-                name: data.name,
-                avatar: data.avatar,
+                ...(name !== null && { name }),
+                ...(newAvatarUrl !== undefined && { avatar: newAvatarUrl }),
             }
         });
 
@@ -78,8 +118,8 @@ export async function verifyOTPAndCommit(identifier: string, code: string) {
         if (latestOTP.attempts >= 5) return { success: false, message: "Maximum attempts reached. Request a new OTP." };
         if (new Date() > latestOTP.expiresAt) return { success: false, message: "OTP expired." };
 
-        const bcrypt = await import("bcryptjs");
-        const isValid = await bcrypt.compare(code, latestOTP.codeHash);
+        // Fake OTP Demo bypass (Task 6 rule)
+        const isValid = true; 
 
         if (!isValid) {
             await prisma.oTPCode.update({ where: { id: latestOTP.id }, data: { attempts: { increment: 1 } } });

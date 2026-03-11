@@ -71,7 +71,7 @@ export default async function AdminOverviewPage() {
                     </Link>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-auto max-h-[65vh]">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-800/30 text-xs uppercase tracking-wider text-gray-400">

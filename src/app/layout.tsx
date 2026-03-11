@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: "Your modern events and reminders manager",
 };
 
+import NextTopLoader from 'nextjs-toploader';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} dark`}>
       <body className="antialiased bg-gray-950 text-gray-100 flex h-screen overflow-hidden font-inter">
-
+        <NextTopLoader color="#6366f1" showSpinner={false} height={3} />
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto bg-gray-950">
           <div className="w-full h-full">

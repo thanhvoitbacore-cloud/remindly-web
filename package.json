@@ -20,6 +20,7 @@
     "moment": "^2.30.1",
     "next": "16.1.6",
     "next-auth": "^5.0.0-beta.30",
+    "nextjs-toploader": "^3.9.17",
     "prisma": "^6.19.2",
     "react": "19.2.3",
     "react-big-calendar": "^1.19.4",

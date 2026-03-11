@@ -1,13 +1,12 @@
-import { CalendarIcon, Clock, MapPin } from "lucide-react";
+import { CalendarIcon, Clock, MapPin, Tag } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
-import SyncCalendarButton from "@/components/SyncCalendarButton";
-import LogoutButton from "@/components/LogoutButton";
 import DashboardFilter from "@/components/DashboardFilter";
 import DeleteEventButton from "@/components/DeleteEventButton";
+import { parseTag } from "@/utils/tagParser";
 
 export const dynamic = "force-dynamic";
 
@@ -29,53 +28,82 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
   const priorityParam = searchParams.priority as "LOW" | "MEDIUM" | "HIGH" | undefined;
   const tagParam = searchParams.tag;
 
+  const normalizedUserEmail = session.user.email || "";
+
   // Build dynamic Where Object for upcoming events
   let dynamicWhere: any = {
-    ownerId: session.user.id,
+    OR: [
+      { ownerId: session.user.id },
+      { meetings: { some: { participantEmail: normalizedUserEmail, rsvpStatus: "ACCEPTED" } } }
+    ],
     isDraft: false
   };
 
   if (q) {
-    dynamicWhere.OR = [
-      { title: { contains: q as string, mode: "insensitive" } },
-      { description: { contains: q as string, mode: "insensitive" } }
-    ];
+    if (!dynamicWhere.AND) dynamicWhere.AND = [];
+    dynamicWhere.AND.push({
+      OR: [
+        { title: { contains: q as string, mode: "insensitive" } },
+        { description: { contains: q as string, mode: "insensitive" } }
+      ]
+    });
   }
   if (priorityParam) dynamicWhere.priority = priorityParam;
-  if (tagParam) dynamicWhere.categoryTag = { contains: tagParam as string, mode: "insensitive" };
+  
+  if (tagParam) {
+    if (!dynamicWhere.AND) dynamicWhere.AND = [];
+    dynamicWhere.AND.push({
+      categoryTag: { equals: tagParam as string }
+    });
+  }
+
+  const allUserEvents = await prisma.event.findMany({
+    where: {
+      OR: [
+        { ownerId: session.user.id },
+        { meetings: { some: { participantEmail: normalizedUserEmail, rsvpStatus: "ACCEPTED" } } }
+      ],
+      isDraft: false
+    },
+    select: { categoryTag: true }
+  });
+
+  const availableTagsSet = new Set<string>();
+  allUserEvents.forEach(e => {
+    if (e.categoryTag) availableTagsSet.add(e.categoryTag);
+  });
+  const availableTags = Array.from(availableTagsSet);
 
   const events = await prisma.event.findMany({
     where: dynamicWhere,
     orderBy: { startTime: 'asc' },
-    include: { meetings: true },
-    take: 5
+    include: { meetings: true }
   });
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <header className="flex items-center justify-between pb-6 border-b border-gray-800">
+      <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-gray-800">
         <div>
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-100 to-gray-400">
             Welcome back!
           </h2>
           <p className="text-gray-400 mt-1">Here is your schedule for today.</p>
         </div>
-        <div className="flex gap-3 items-center">
-          <SyncCalendarButton />
-          <Link href="/events/create" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">
-            + New Event
-          </Link>
-        </div>
       </header>
 
       <div className="max-w-4xl space-y-4">
         <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Clock className="w-5 h-5 text-indigo-400" />
-            Upcoming Agenda
-          </h3>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+            <h3 className="text-xl font-semibold flex items-center gap-2">
+              <Clock className="w-5 h-5 text-indigo-400" />
+              Upcoming Agenda
+            </h3>
+            <Link href="/events/create" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] w-full md:w-auto text-center">
+              + New Event
+            </Link>
+          </div>
 
-          <DashboardFilter />
+          <DashboardFilter availableTags={availableTags} />
 
           {events.length === 0 ? (
             <div className="p-8 text-center rounded-2xl bg-gray-900 border border-gray-800 flex flex-col items-center justify-center">
@@ -88,17 +116,18 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
                 <Link href="/events/create" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)]">
                   Create Event
                 </Link>
-                {/* The sync button is always enabled even if no data */}
-                <SyncCalendarButton variant="secondary" />
               </div>
             </div>
           ) : (
-            events.map(event => (
-              <div key={event.id} className="p-5 rounded-2xl bg-gray-900 border border-gray-800 hover:border-indigo-500/50 transition self-start group relative overflow-hidden">
+            events.map(event => {
+              const parsedTag = event.categoryTag ? parseTag(event.categoryTag) : null;
+              return (
+              <div key={event.id} className="p-5 pl-6 rounded-2xl bg-gray-900 border border-gray-800 hover:border-indigo-500/50 transition self-start group relative overflow-hidden">
+                <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${parsedTag ? parsedTag.color : 'bg-gray-700'}`} />
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
                 <div className="flex-1 min-w-0 relative z-10">
-                  <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-white font-medium truncate pr-4">{event.title}</h4>
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-2 md:mb-1 gap-2 md:gap-0">
+                    <h4 className="text-white font-medium truncate pr-0 md:pr-4">{event.title}</h4>
                     <div className="flex items-center shrink-0">
                       {event.priority === "HIGH" && (
                         <span className="px-2 py-0.5 mr-2 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase">
@@ -116,6 +145,14 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
                     </div>
                   </div>
                 </div>
+                {event.categoryTag && (
+                  <div className="mt-2 mb-3">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-gray-950 border border-gray-800 text-[10px] font-medium text-gray-300">
+                      <span className={`w-2 h-2 rounded-full ${parsedTag ? parsedTag.color : 'bg-gray-500'}`} />
+                      {parsedTag ? parsedTag.label : event.categoryTag}
+                    </span>
+                  </div>
+                )}
                 {event.description && (
                   <p className="text-gray-400 text-sm mb-4 line-clamp-2 relative">
                     {event.description}
@@ -138,7 +175,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
                   )}
                 </div>
               </div>
-            ))
+            )})
           )}
         </div>
       </div>

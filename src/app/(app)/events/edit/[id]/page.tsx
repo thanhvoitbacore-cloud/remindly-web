@@ -5,16 +5,40 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import EditEventClientForm from "./EditEventClientForm";
 
-export default async function EditEventPage({ params }: { params: { id: string } }) {
+export default async function EditEventPage(props: { params: Promise<{ id: string }> }) {
     const session = await auth();
     if (!session?.user?.id) redirect("/login");
 
+    const params = await props.params;
     const eventId = params.id;
+    const normalizedUserEmail = session.user.email || "";
+
     const event = await prisma.event.findFirst({
-        where: { id: eventId, ownerId: session.user.id }
+        where: {
+            id: eventId,
+            OR: [
+                { ownerId: session.user.id },
+                { meetings: { some: { participantEmail: normalizedUserEmail } } }
+            ]
+        },
+        include: { meetings: true }
     });
 
     if (!event) notFound();
+
+    // Xác định Role (Owner = HOST, Khách = ATTENDEE)
+    const isOwner = event.ownerId === session.user.id;
+    let userRole: "HOST" | "ATTENDEE" = isOwner ? "HOST" : "ATTENDEE";
+    let currentRsvp = "PENDING";
+
+    if (!isOwner) {
+        const myMeeting = event.meetings.find(m => m.participantEmail === normalizedUserEmail);
+        if (myMeeting) {
+            currentRsvp = myMeeting.rsvpStatus;
+        }
+    } else {
+        currentRsvp = "ACCEPTED";
+    }
 
     // Định dạng lại Date/Time đẩy vào input default
     const formattedDate = format(event.startTime, "yyyy-MM-dd");
@@ -29,7 +53,9 @@ export default async function EditEventPage({ params }: { params: { id: string }
         endTime: formattedEndTime,
         priority: event.priority,
         categoryTag: event.categoryTag || "General",
-        isDraft: event.isDraft
+        isDraft: event.isDraft,
+        userRole,
+        currentRsvp
     };
 
     return (
@@ -48,7 +74,7 @@ export default async function EditEventPage({ params }: { params: { id: string }
                 </div>
             </header>
 
-            <EditEventClientForm eventId={event.id} initialData={initialData} />
+            <EditEventClientForm key={event.id} eventId={event.id} initialData={initialData} />
         </div>
     );
 }

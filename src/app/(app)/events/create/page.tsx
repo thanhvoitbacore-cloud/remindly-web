@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createEventAction } from "./actions";
 import { CalendarIcon, Clock, Tag, AlignLeft, AlertCircle, Bookmark, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import CustomTimePicker from "@/components/CustomTimePicker";
+import CustomDatePicker from "@/components/CustomDatePicker";
+import CustomTagSelector from "@/components/CustomTagSelector";
 
-export default function CreateEventPage() {
+function CreateEventForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const defaultDate = searchParams.get("date") || "";
+
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -107,12 +113,7 @@ export default function CreateEventPage() {
                             <label className="block text-sm font-medium text-gray-300 mb-1.5 flex items-center gap-2">
                                 <Tag className="w-4 h-4 text-emerald-400" /> Category Tag
                             </label>
-                            <input
-                                type="text"
-                                name="categoryTag"
-                                placeholder="Work, Personal, Health..."
-                                className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white placeholder:text-gray-600 transition"
-                            />
+                            <CustomTagSelector name="categoryTag" />
                         </div>
                     </div>
 
@@ -122,12 +123,10 @@ export default function CreateEventPage() {
                             <label className="block text-sm font-medium text-gray-300 mb-1.5 flex items-center gap-2">
                                 <CalendarIcon className="w-4 h-4 text-purple-400" /> Date *
                             </label>
-                            <input
-                                required
-                                type="date"
+                            <CustomDatePicker
                                 name="date"
-                                className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white transition color-scheme-dark"
-                                style={{ colorScheme: "dark" }}
+                                required
+                                defaultValue={defaultDate}
                             />
                         </div>
 
@@ -136,13 +135,7 @@ export default function CreateEventPage() {
                             <label className="block text-sm font-medium text-gray-300 mb-1.5 flex items-center gap-2">
                                 <Clock className="w-4 h-4 text-purple-400" /> Start Time *
                             </label>
-                            <input
-                                required
-                                type="time"
-                                name="startTime"
-                                className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white transition"
-                                style={{ colorScheme: "dark" }}
-                            />
+                            <CustomTimePicker name="startTime" required />
                         </div>
 
                         {/* End Time */}
@@ -150,25 +143,19 @@ export default function CreateEventPage() {
                             <label className="block text-sm font-medium text-gray-300 mb-1.5 flex items-center gap-2">
                                 <Clock className="w-4 h-4 text-purple-400" /> End Time *
                             </label>
-                            <input
-                                required
-                                type="time"
-                                name="endTime"
-                                className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white transition"
-                                style={{ colorScheme: "dark" }}
-                            />
+                            <CustomTimePicker name="endTime" required />
                         </div>
                     </div>
                 </div>
 
-                <div className="pt-6 border-t border-gray-800 flex items-center justify-end gap-4">
+                <div className="pt-6 border-t border-gray-800 flex flex-col-reverse md:flex-row items-center justify-end gap-3 md:gap-4">
                     {/* Hành động Save As Draft */}
                     <button
                         type="submit"
                         name="action"
                         value="draft"
                         disabled={loading}
-                        className="px-6 py-3 rounded-xl font-medium text-sm text-gray-300 bg-gray-800 hover:bg-gray-700 hover:text-white transition disabled:opacity-50"
+                        className="w-full md:w-auto px-6 py-3 rounded-xl font-medium text-sm text-gray-300 bg-gray-800 hover:bg-gray-700 hover:text-white transition disabled:opacity-50"
                     >
                         Save as Draft
                     </button>
@@ -179,7 +166,7 @@ export default function CreateEventPage() {
                         name="action"
                         value="publish"
                         disabled={loading}
-                        className="px-6 py-3 rounded-xl font-medium text-sm text-white bg-indigo-600 hover:bg-indigo-500 transition shadow-[0_0_15px_rgba(79,70,229,0.3)] flex items-center gap-2 disabled:opacity-50"
+                        className="w-full md:w-auto flex justify-center items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm text-white bg-indigo-600 hover:bg-indigo-500 transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50"
                     >
                         <CheckCircle2 className="w-4 h-4" />
                         {loading ? "Saving..." : "Create Event"}
@@ -187,5 +174,13 @@ export default function CreateEventPage() {
                 </div>
             </form>
         </div>
+    );
+}
+
+export default function CreateEventPage() {
+    return (
+        <Suspense fallback={<div className="p-8 text-center text-gray-400 animate-pulse">Loading form...</div>}>
+            <CreateEventForm />
+        </Suspense>
     );
 }

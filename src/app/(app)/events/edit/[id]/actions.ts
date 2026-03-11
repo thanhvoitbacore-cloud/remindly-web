@@ -10,7 +10,8 @@ export async function updateEventAction(eventId: string, formData: FormData) {
 
     // Lọc quyền sỡ hữu Event
     const existingEvent = await prisma.event.findFirst({
-        where: { id: eventId, ownerId: session.user.id }
+        where: { id: eventId, ownerId: session.user.id },
+        include: { meetings: true }
     });
     if (!existingEvent) throw new Error("Event not found or unauthorized");
 
@@ -46,6 +47,31 @@ export async function updateEventAction(eventId: string, formData: FormData) {
         }
     });
 
+    if (existingEvent.categoryTag === "Meeting" || existingEvent.categoryTag === "InstantMeeting" || existingEvent.meetings.length > 0) {
+        const participantEmails = existingEvent.meetings
+            .map(m => m.participantEmail)
+            .filter(email => email !== session.user?.email);
+
+        if (participantEmails.length > 0) {
+            const internalMembers = await prisma.user.findMany({
+                where: { email: { in: participantEmails } },
+                select: { id: true }
+            });
+            if (internalMembers.length > 0) {
+                await prisma.notification.createMany({
+                    data: internalMembers.map(m => ({
+                        userId: m.id,
+                        title: `Thay đổi thông tin họp: ${title}`,
+                        message: `${session.user?.name || session.user?.email} đã cập nhật thông tin cuộc họp.`,
+                        type: "SYSTEM",
+                        isRead: false,
+                        metadata: { eventId }
+                    }))
+                });
+            }
+        }
+    }
+
     revalidatePath("/dashboard");
     revalidatePath("/calendar");
     revalidatePath("/drafts");
@@ -56,6 +82,37 @@ export async function updateEventAction(eventId: string, formData: FormData) {
 export async function deleteEventAction(eventId: string) {
     const session = await auth();
     if (!session?.user?.id) throw new Error("Unauthorized");
+
+    const existingEvent = await prisma.event.findFirst({
+        where: { id: eventId, ownerId: session.user.id },
+        include: { meetings: true }
+    });
+
+    if (!existingEvent) throw new Error("Event not found or unauthorized");
+
+    if (existingEvent.categoryTag === "Meeting" || existingEvent.categoryTag === "InstantMeeting" || existingEvent.meetings.length > 0) {
+        const participantEmails = existingEvent.meetings
+            .map(m => m.participantEmail)
+            .filter(email => email !== session.user?.email);
+
+        if (participantEmails.length > 0) {
+            const internalMembers = await prisma.user.findMany({
+                where: { email: { in: participantEmails } },
+                select: { id: true }
+            });
+            if (internalMembers.length > 0) {
+                await prisma.notification.createMany({
+                    data: internalMembers.map(m => ({
+                        userId: m.id,
+                        title: `Cuộc họp đã bị hủy: ${existingEvent.title}`,
+                        message: `${session.user?.name || session.user?.email} đã hủy cuộc họp này.`,
+                        type: "SYSTEM",
+                        isRead: false
+                    }))
+                });
+            }
+        }
+    }
 
     // CASCADE xoá sẽ tự lo liệu Meeting con, ta chỉ việc xoá Record mẹ
     await prisma.event.delete({

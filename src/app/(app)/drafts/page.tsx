@@ -15,17 +15,23 @@ export default async function DraftsPage() {
     const drafts = await prisma.event.findMany({
         where: {
             ownerId: session.user.id,
-            isDraft: true
+            isDraft: true,
+            categoryTag: { not: "InstantMeeting" }
         },
         orderBy: { updatedAt: 'desc' }
     });
 
     return (
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
-            <header className="flex items-center justify-between pb-6 border-b border-gray-800">
+            <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-gray-800">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Draft Drawer</h1>
                     <p className="text-gray-400">Manage unfinished events. Drafts are automatically purged 30 days after their last modification.</p>
+                </div>
+                <div className="w-full md:w-auto">
+                    <Link href="/events/create" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] whitespace-nowrap w-full block md:inline-block text-center">
+                        + New Draft
+                    </Link>
                 </div>
             </header>
 

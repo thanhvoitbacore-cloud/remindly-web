@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { Bell, Sparkles, Info, CalendarDays, Users, X, AlertOctagon } from "lucide-react";
+import { Bell, Sparkles, Info, CalendarDays, Users, X, AlertOctagon, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function NotificationClientList({ notifications }: { notifications: any[] }) {
@@ -71,18 +71,53 @@ export default function NotificationClientList({ notifications }: { notification
                         </div>
 
                         <div className="flex-1 mt-0.5">
-                            <div className="flex justify-between items-start mb-1">
+                            <div className="flex justify-between items-start mb-1 gap-2">
                                 <h4 className={`text-base font-medium ${isUnread ? 'text-white' : 'text-gray-300'}`}>
                                     {note.title}
                                 </h4>
-                                <span className="text-xs text-gray-500 shrink-0 mt-1 whitespace-nowrap">
-                                    {format(new Date(note.createdAt), "h:mm a · MMM d")}
-                                </span>
+                                <div className="flex items-center gap-3 shrink-0">
+                                    <span className="text-xs text-gray-500 whitespace-nowrap">
+                                        {format(new Date(note.createdAt), "h:mm a · MMM d")}
+                                    </span>
+                                    {/* Delete Notification Button */}
+                                    <button 
+                                        onClick={async (e) => {
+                                            e.stopPropagation();
+                                            const { deleteNotificationAction } = await import("@/app/(app)/notifications/actions");
+                                            await deleteNotificationAction(note.id);
+                                        }}
+                                        className="p-1.5 text-gray-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition"
+                                        title="Delete Notification from history"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
                             <p className={`text-sm ${isUnread ? 'text-gray-300' : 'text-gray-500'} ${isClickable && !note.metadata ? 'line-clamp-2' : ''}`}>
                                 {note.message}
                             </p>
-                            {isClickable && (
+                            {note.type === "INVITE" && note.metadata?.eventId && (
+                                <div className="flex gap-2 mt-3 cursor-default">
+                                    <button 
+                                        onClick={async (e) => {
+                                            e.stopPropagation();
+                                            const { handleInstantRsvpAction } = await import("./actions");
+                                            const res = await handleInstantRsvpAction(note.id, note.metadata.eventId, true);
+                                            if (res?.success) router.push('/meetings/create');
+                                        }}
+                                        className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition"
+                                    >Tham gia</button>
+                                    <button 
+                                        onClick={async (e) => {
+                                            e.stopPropagation();
+                                            const { handleInstantRsvpAction } = await import("./actions");
+                                            await handleInstantRsvpAction(note.id, note.metadata.eventId, false);
+                                        }}
+                                        className="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 rounded-lg text-sm font-medium transition"
+                                    >Từ chối</button>
+                                </div>
+                            )}
+                            {note.type !== "INVITE" && isClickable && (
                                 <p className="text-xs text-indigo-400 mt-2 font-medium">
                                     {note.actionUrl ? "Click to view event →" : "Click to view error log →"}
                                 </p>

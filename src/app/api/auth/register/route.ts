@@ -5,12 +5,12 @@ import { hashPassword } from "@/lib/auth";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { name, email, password } = body;
+        const { name, contact, password } = body;
 
         // Basic validation
-        if (!email || !password) {
+        if (!contact || !password) {
             return NextResponse.json(
-                { error: "Email and password are required" },
+                { error: "Contact info (email or phone) and password are required" },
                 { status: 400 }
             );
         }
@@ -22,14 +22,24 @@ export async function POST(req: Request) {
             );
         }
 
+        // Parse contact
+        const isEmail = contact.includes("@");
+        const email = isEmail ? contact : null;
+        const phoneNumber = !isEmail ? contact : null;
+
         // Check if user already exists
-        const existingUser = await prisma.user.findUnique({
-            where: { email },
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    ...(email ? [{ email }] : []),
+                    ...(phoneNumber ? [{ phoneNumber }] : [])
+                ]
+            },
         });
 
         if (existingUser) {
             return NextResponse.json(
-                { error: "A user with this email already exists" },
+                { error: "A user with this email or phone number already exists" },
                 { status: 409 }
             );
         }
@@ -42,6 +52,7 @@ export async function POST(req: Request) {
             data: {
                 name: name || null,
                 email,
+                phoneNumber,
                 passwordHash,
                 accountStatus: "ACTIVE", // Or PENDING_VERIFICATION if you have email verification implementation
             },

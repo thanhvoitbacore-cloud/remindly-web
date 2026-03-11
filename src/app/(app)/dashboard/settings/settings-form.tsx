@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateProfile, generateOTP, verifyOTPAndCommit, updatePassword } from "./actions";
 import LogoutButton from "@/components/LogoutButton";
-import { User, Shield, KeyRound, Smartphone, Mail, Settings2, Image as ImageIcon } from "lucide-react";
+import { User, Shield, KeyRound, Smartphone, Mail, Settings2, Image as ImageIcon, Upload } from "lucide-react";
+import { useRef } from "react";
 
 type UserData = {
     name: string | null;
@@ -16,7 +17,19 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
     // Basic Profile State
     const [name, setName] = useState(initialUser.name || "");
     const [avatar, setAvatar] = useState(initialUser.avatar || "");
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState(initialUser.avatar || "");
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Sync state if server revalidates data
+    useEffect(() => {
+        setName(initialUser.name || "");
+        setAvatar(initialUser.avatar || "");
+        setPreviewUrl(initialUser.avatar || "");
+        setEmail(initialUser.email || "");
+        setPhone(initialUser.phoneNumber || "");
+    }, [initialUser]);
 
     // Email/Phone OTP State
     const [email, setEmail] = useState(initialUser.email || "");
@@ -34,9 +47,23 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
 
     const handleProfileSubmit = async () => {
         setIsUpdatingProfile(true);
-        const res = await updateProfile({ name, avatar });
+        const formData = new FormData();
+        formData.append("name", name);
+        if (avatarFile) {
+            formData.append("avatarFile", avatarFile);
+        }
+        
+        const res = await updateProfile(formData);
         alert(res.message);
         setIsUpdatingProfile(false);
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setAvatarFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        }
     };
 
     const handleIdentifierRequest = async (target: string) => {
@@ -103,30 +130,39 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">Avatar URL</label>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">Profile Picture</label>
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <ImageIcon className="h-4 w-4 text-gray-600" />
-                                </div>
                                 <input
-                                    type="text"
-                                    value={avatar}
-                                    placeholder="https://example.com/avatar.png"
-                                    onChange={(e) => setAvatar(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-indigo-500 transition"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-950 border border-gray-800 hover:border-gray-700 rounded-xl text-gray-300 hover:text-white transition focus:outline-none focus:border-indigo-500"
+                                >
+                                    <Upload className="w-4 h-4" />
+                                    Choose Image...
+                                </button>
+                                {avatarFile && <p className="text-xs text-indigo-400 mt-2">Selected: {avatarFile.name}</p>}
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-800 rounded-xl bg-gray-950/50">
-                        {avatar ? (
-                            <img src={avatar} alt="Avatar Preview" className="w-24 h-24 rounded-full object-cover border-4 border-indigo-500/20" />
+                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-800 rounded-xl bg-gray-950/50 relative overflow-hidden group">
+                        {previewUrl ? (
+                            <img src={previewUrl} alt="Avatar Preview" className="w-24 h-24 rounded-full object-cover border-4 border-indigo-500/20 shadow-lg" />
                         ) : (
-                            <div className="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center">
+                            <div className="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center shadow-lg">
                                 <User className="w-10 h-10 text-gray-600" />
                             </div>
                         )}
+                        <div className="absolute inset-0 bg-black/50 invisible group-hover:visible flex items-center justify-center transition-all cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                            <Upload className="w-6 h-6 text-white" />
+                        </div>
                         <span className="text-xs font-medium text-gray-500 mt-4 uppercase tracking-wider">Avatar Preview</span>
                     </div>
                 </div>
@@ -263,7 +299,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
 
                     <div className="p-6 bg-gray-950/50 border-l-4 border-red-500/50 rounded-r-xl flex items-center justify-between">
                         <div>
-                            <h3 className="text-base font-semibold text-gray-200">End Current Session</h3>
+                            <h3 className="text-base font-semibold text-gray-200">Logout</h3>
                             <p className="text-sm text-gray-500 mt-1">This will instantly sign you out of your account on this device. Protected pages will no longer be available until you authenticate again.</p>
                         </div>
                         <div className="pl-6">

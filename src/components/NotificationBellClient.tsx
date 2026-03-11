@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { Bell, Info, Users, CalendarDays, Sparkles, AlertOctagon, CheckCheck } from "lucide-react";
+import { Bell, Info, Users, CalendarDays, Sparkles, AlertOctagon, CheckCheck, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Note {
@@ -39,10 +39,22 @@ export default function NotificationBellClient({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const toggleOpen = () => setIsOpen(!isOpen);
+    const toggleOpen = async () => {
+        setIsOpen(!isOpen);
+        if (!isOpen && unreadCount > 0) {
+            setUnreadCount(0);
+            const { markAllNotificationsAsRead } = await import("@/app/(app)/notifications/actions");
+            await markAllNotificationsAsRead();
+        }
+    };
 
-    const handleNoteClick = (note: Note) => {
+    const handleNoteClick = async (note: Note) => {
         setIsOpen(false);
+        if (!note.isRead) {
+            setUnreadCount(prev => Math.max(0, prev - 1));
+            const { markNotificationAsRead } = await import("@/app/(app)/notifications/actions");
+            await markNotificationAsRead(note.id);
+        }
         if (note.actionUrl) {
             router.push(note.actionUrl);
         } else {
@@ -68,7 +80,7 @@ export default function NotificationBellClient({
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-3 w-80 md:w-96 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                <div className="absolute left-0 mt-3 w-80 md:w-96 bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 origin-top-left">
                     <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-950/50">
                         <h3 className="font-semibold text-white">Notifications</h3>
                         {unreadCount > 0 && (
@@ -100,25 +112,82 @@ export default function NotificationBellClient({
                                         }
                                     }
 
+                                    // Check if this is an actionable invite
+                                    let eventId = null;
+                                    if (note.metadata) {
+                                        if (typeof note.metadata === 'string') {
+                                            try {
+                                                const parsed = JSON.parse(note.metadata);
+                                                eventId = parsed.eventId;
+                                            } catch(e) {}
+                                        } else if (typeof note.metadata === 'object') {
+                                            eventId = note.metadata.eventId;
+                                        }
+                                    }
+
                                     return (
                                         <div
                                             key={note.id}
-                                            onClick={() => handleNoteClick(note)}
-                                            className={`p-4 border-b border-gray-800/50 hover:bg-gray-800 transition cursor-pointer flex gap-3 ${!note.isRead ? 'bg-gray-800/30' : ''}`}
+                                            className={`relative p-4 border-b border-gray-800/50 hover:bg-gray-800 transition flex gap-3 ${!note.isRead ? 'bg-gray-800/30' : ''}`}
                                         >
                                             <div className={`mt-0.5 ${iconColor}`}>
                                                 <Icon className="w-4 h-4" />
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h4 className={`text-sm font-medium truncate ${!note.isRead ? 'text-white' : 'text-gray-300'}`}>
-                                                    {note.title}
-                                                </h4>
-                                                <p className="text-xs text-gray-400 mt-1 line-clamp-1">{note.message}</p>
+                                            <div className="flex-1 min-w-0" onClick={() => handleNoteClick(note)}>
+                                                <div className="flex justify-between items-start gap-2">
+                                                    <h4 className={`text-sm font-medium truncate cursor-pointer ${!note.isRead ? 'text-white' : 'text-gray-300'}`}>
+                                                        {note.title}
+                                                    </h4>
+                                                    {/* Delete Notification Button */}
+                                                    <button 
+                                                        onClick={async (e) => {
+                                                            e.stopPropagation();
+                                                            const { deleteNotificationAction } = await import("@/app/(app)/notifications/actions");
+                                                            await deleteNotificationAction(note.id);
+                                                        }}
+                                                        className="p-1 text-gray-600 hover:text-red-400 hover:bg-red-500/10 rounded transition shrink-0"
+                                                        title="Delete Notification"
+                                                    >
+                                                        <Trash2 className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </div>
+                                                <p className="text-xs text-gray-400 mt-1 cursor-pointer line-clamp-1">{note.message}</p>
                                                 <p className="text-[10px] text-gray-500 mt-1.5 uppercase tracking-wider font-semibold">
                                                     {format(new Date(note.createdAt), "MMM d, h:mm a")}
                                                 </p>
                                             </div>
-                                            {!note.isRead && (
+
+                                            {/* ACCEPT / DECLINE ACTIONS FOR INVITES */}
+                                            {note.type === "INVITE" && eventId && (
+                                                <div className="flex flex-col gap-2 ml-2 self-center">
+                                                    <button 
+                                                        onClick={async (e) => {
+                                                            e.stopPropagation();
+                                                            const { manageMeetingRSVP } = await import("@/app/(app)/events/actions");
+                                                            await manageMeetingRSVP(eventId, "ACCEPTED");
+                                                            const { markNotificationAsRead } = await import("@/app/(app)/notifications/actions");
+                                                            await markNotificationAsRead(note.id);
+                                                        }}
+                                                        className="px-2 py-1 text-xs bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 rounded font-medium transition"
+                                                    >
+                                                        Accept
+                                                    </button>
+                                                    <button 
+                                                        onClick={async (e) => {
+                                                            e.stopPropagation();
+                                                            const { manageMeetingRSVP } = await import("@/app/(app)/events/actions");
+                                                            await manageMeetingRSVP(eventId, "DECLINED");
+                                                            const { markNotificationAsRead } = await import("@/app/(app)/notifications/actions");
+                                                            await markNotificationAsRead(note.id);
+                                                        }}
+                                                        className="px-2 py-1 text-xs bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 rounded font-medium transition"
+                                                    >
+                                                        Decline
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {!note.isRead && note.type !== "INVITE" && (
                                                 <div className="w-2 h-2 rounded-full bg-indigo-500 shrink-0 self-center shadow-[0_0_8px_rgba(79,70,229,0.8)]" />
                                             )}
                                         </div>
