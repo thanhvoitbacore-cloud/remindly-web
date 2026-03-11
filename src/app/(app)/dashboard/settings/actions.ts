@@ -22,17 +22,12 @@ export async function updateProfile(formData: FormData) {
         let newAvatarUrl = currentUser?.avatar;
 
         if (avatarFile && avatarFile.size > 0) {
-            const ext = avatarFile.name.split('.').pop() || 'png';
-            const filename = `${session.user.id}-${Date.now()}.${ext}`;
-            const uploadDir = path.join(process.cwd(), "public", "avatars");
-            
-            // Ensure directory exists
-            await fs.mkdir(uploadDir, { recursive: true });
-            
-            // Write new file
-            const filePath = path.join(uploadDir, filename);
             const buffer = Buffer.from(await avatarFile.arrayBuffer());
-            await fs.writeFile(filePath, buffer);
+            const mimeType = avatarFile.type || "image/png";
+            
+            // Convert to Base64 data URL to store in database
+            const base64String = buffer.toString("base64");
+            newAvatarUrl = `data:${mimeType};base64,${base64String}`;
 
             // Securely delete the old local avatar to save server storage space
             if (currentUser?.avatar && currentUser.avatar.startsWith("/avatars/")) {
@@ -45,9 +40,6 @@ export async function updateProfile(formData: FormData) {
                     console.log("[Notice] Old avatar file not found to delete, skipping.");
                 }
             }
-
-            // Generate cache-busting URL
-            newAvatarUrl = `/avatars/${filename}?t=${Date.now()}`;
         }
 
         await prisma.user.update({
