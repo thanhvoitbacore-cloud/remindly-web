@@ -30,6 +30,8 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const isFixedMeeting = initialData.categoryTag === "Meeting" || initialData.categoryTag === "Meeting|bg-yellow-200";
+
     async function handleUpdate(formData: FormData) {
         setIsSubmitting(true);
         setError(null);
@@ -127,7 +129,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                         <select
                             name="priority"
                             defaultValue={initialData.priority}
-                            disabled={initialData.userRole === "ATTENDEE"}
+                            disabled={initialData.userRole === "ATTENDEE" || isFixedMeeting}
                             className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl pl-10 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none disabled:opacity-70 disabled:bg-gray-900"
                         >
                             <option value="LOW">Low - No Rush</option>
@@ -143,7 +145,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                     <CustomTagSelector 
                         name="categoryTag" 
                         defaultValue={initialData.categoryTag} 
-                        disabled={initialData.userRole === "ATTENDEE"} 
+                        disabled={initialData.userRole === "ATTENDEE" || isFixedMeeting} 
                     />
                 </div>
             </div>

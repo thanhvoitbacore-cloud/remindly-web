@@ -125,7 +125,7 @@ export async function createMeetingAction(formData: FormData) {
             startTime,
             endTime,
             priority: "HIGH",
-            categoryTag: "Meeting",
+            categoryTag: "Meeting|bg-yellow-200",
             isDraft: false,
             ownerId: session.user.id,
             source: "local"
