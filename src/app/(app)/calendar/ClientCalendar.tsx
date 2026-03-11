@@ -110,8 +110,8 @@ export default function ClientCalendar({ initialEvents }: CalendarProps) {
 
     // Custom UI Component cho Calendar Cells
     const eventStyleGetter = (event: ParsedEvent) => {
-        let backgroundColor = "#8b5cf6"; // Vivid Violet (Default Events)
-        let borderLeft = "4px solid #a78bfa"; // Light Violet
+        let backgroundColor = "#374151"; // Gray-700 (Default Events)
+        let borderLeft = "4px solid #4b5563"; // Gray-600
 
         if (event.categoryTag) {
             const parsed = parseTag(event.categoryTag);
