@@ -47,15 +47,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
 
                 if (!user || !user.passwordHash) {
+                    console.log("Login failed: User not found or has no password hash.");
                     return null;
                 }
 
-                const bcrypt = await import("bcryptjs");
-                const valid = await bcrypt.compare(password, user.passwordHash);
+                const { comparePasswords } = await import("@/lib/auth");
+                const valid = await comparePasswords(password, user.passwordHash);
 
                 if (!valid) {
+                    console.log("Login failed: bcrypt.compare returned false for user:", user.email || user.phoneNumber);
                     return null;
                 }
+                
+                console.log("Login success for user:", user.email || user.phoneNumber);
 
                 return {
                     id: user.id,
