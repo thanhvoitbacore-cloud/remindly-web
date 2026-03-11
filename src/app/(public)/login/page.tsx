@@ -76,7 +76,7 @@ export default function LoginPage() {
         setIsLoading(true);
         const res = await checkUserExists(resetIdentifier);
         if (!res.success) {
-            setErrorMsg(res.message);
+            setErrorMsg(res.message || "Lỗi không xác định.");
             setIsLoading(false);
             return;
         }
