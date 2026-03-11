@@ -89,12 +89,18 @@ export default function ClientCalendar({ initialEvents }: CalendarProps) {
         };
     }, []);
 
-    // Fix Event parsing bug: Server components serialize dates to Strings in Next 15 sometimes
-    const mappedEvents = initialEvents.map(e => ({
-        ...e,
-        start: new Date(e.start),
-        end: new Date(e.end)
-    }));
+    // Fix Event parsing bug: Server components serialize dates to Strings in Next 15 sometimes.
+    // Also fix timezone offset bugs: Server formats dates using UTC locally, while browser client shifts them.
+    // By extracting the UTC components, we "float" the server time into the local browser time correctly.
+    const mappedEvents = initialEvents.map(e => {
+        const startRaw = new Date(e.start);
+        const endRaw = new Date(e.end);
+        return {
+            ...e,
+            start: new Date(startRaw.getUTCFullYear(), startRaw.getUTCMonth(), startRaw.getUTCDate(), startRaw.getUTCHours(), startRaw.getUTCMinutes()),
+            end: new Date(endRaw.getUTCFullYear(), endRaw.getUTCMonth(), endRaw.getUTCDate(), endRaw.getUTCHours(), endRaw.getUTCMinutes())
+        };
+    });
 
     const handleSelectSlot = ({ start }: { start: Date }) => {
         // Rediect to create page with prefilled Date
