@@ -137,17 +137,15 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                                     accept="image/*"
                                     className="hidden"
                                     ref={fileInputRef}
-                                    onChange={handleFileChange}
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => fileInputRef.current?.click()}
+                                    onClick={() => {}}
                                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-950 border border-gray-800 hover:border-gray-700 rounded-xl text-gray-300 hover:text-white transition focus:outline-none focus:border-indigo-500"
                                 >
                                     <Upload className="w-4 h-4" />
                                     Choose Image...
                                 </button>
-                                {avatarFile && <p className="text-xs text-indigo-400 mt-2">Selected: {avatarFile.name}</p>}
                             </div>
                         </div>
                     </div>
