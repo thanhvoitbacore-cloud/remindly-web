@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { UserPlus, ArrowRight, Mail, Phone, ChevronLeft, CheckCircle2 } from "lucide-react";
+import InteractiveBackground from "@/components/InteractiveBackground";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -73,12 +74,19 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center translate-y-[-2rem] mt-12">
-            <div className="w-full max-w-md p-8 rounded-3xl bg-gray-900/80 backdrop-blur-xl border border-gray-800 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-pink-600/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl" />
+        <div className="flex w-full h-screen overflow-hidden bg-gray-950">
+            <InteractiveBackground 
+                primaryColor="pink"
+                secondaryColor="indigo"
+                title={<>Join <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-indigo-400">Remindly</span></>}
+                description="Create an account in seconds and take full control of your schedule and meetings today."
+            />
 
-                <div className="relative flex flex-col items-center">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 overflow-y-auto relative">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-pink-600/10 rounded-full blur-3xl lg:hidden" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl lg:hidden" />
+                
+                <div className="w-full max-w-md relative z-10 flex flex-col items-center">
                     {signupStep !== "select" && (
                         <button onClick={() => setSignupStep(signupStep === "otp" ? "form" : "select")} className="absolute -top-2 -left-2 p-2 hover:bg-gray-800 rounded-full text-gray-400 transition" title="Go back">
                             <ChevronLeft className="w-5 h-5" />

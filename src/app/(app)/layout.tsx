@@ -16,7 +16,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
     return (
         <div className="flex h-screen overflow-hidden">
-            <NextTopLoader color="#6366f1" showSpinner={false} />
             <Sidebar session={session} notificationBell={/* @ts-ignore Async Server Component */ <NotificationBell />} />
 
             {/* App Content */}

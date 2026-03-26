@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { LogIn, ArrowRight, ArrowLeft, KeyRound, Mail, CheckCircle2 } from "lucide-react";
+import InteractiveBackground from "@/components/InteractiveBackground";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -142,12 +143,19 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center translate-y-[-2rem] mt-12">
-            <div className="w-full max-w-md p-8 rounded-3xl bg-gray-900/80 backdrop-blur-xl border border-gray-800 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl" />
+        <div className="flex w-full h-screen overflow-hidden bg-gray-950">
+            <InteractiveBackground 
+                primaryColor="indigo"
+                secondaryColor="purple"
+                title={<>Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Remindly</span></>}
+                description="Your intelligent schedule and event manager. Keep everything organized in one beautiful place."
+            />
 
-                <div className="relative">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 overflow-y-auto relative">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl lg:hidden" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl lg:hidden" />
+                
+                <div className="w-full max-w-md relative z-10">
                     <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 border border-indigo-500/20 shadow-inner">
                         <LogIn className="w-6 h-6 text-indigo-400" />
                     </div>
