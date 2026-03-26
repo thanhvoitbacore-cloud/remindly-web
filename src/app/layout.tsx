@@ -1,34 +1,30 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { BellRing, CalendarIcon, LayoutDashboard, Settings, User, CalendarDays, Users, FileEdit } from "lucide-react";
 import Link from "next/link";
-import { CalendarIcon, BellRing, User, LogIn, LayoutDashboard, Settings } from "lucide-react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import NotificationBell from "@/components/NotificationBell";
+import MobileNavBar from "@/components/MobileNavBar";
+import Sidebar from "@/components/Sidebar";
+import NextTopLoader from "nextjs-toploader";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+    const session = await auth();
 
-export const metadata: Metadata = {
-  title: "Remindly App",
-  description: "Your modern events and reminders manager",
-};
+    if (!session?.user?.id) {
+        redirect("/login");
+    }
 
-import NextTopLoader from 'nextjs-toploader';
+    return (
+        <div className="flex h-screen overflow-hidden">
+            <NextTopLoader color="#6366f1" showSpinner={false} />
+            <Sidebar session={session} notificationBell={/* @ts-ignore Async Server Component */ <NotificationBell />} />
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className={`${inter.variable} dark`}>
-      <body className="antialiased bg-gray-950 text-gray-100 flex h-screen overflow-hidden font-inter">
-        <NextTopLoader color="#6366f1" showSpinner={false} height={3} />
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-950">
-          <div className="w-full h-full">
-            {children}
-          </div>
-        </main>
-      </body>
-    </html>
-  );
+            {/* App Content */}
+            <main className="flex-1 overflow-y-auto bg-gray-950 p-4 md:p-8 max-w-7xl w-full mx-auto min-h-full pb-24 md:pb-8">
+                {children}
+            </main>
+
+            <MobileNavBar />
+        </div>
+    );
 }
