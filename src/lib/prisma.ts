@@ -110,13 +110,30 @@ function seedDatabase() {
       id: generateUUID(),
       ownerId: adminUser.id,
       title: "Draft: Kế hoạch ngân sách Q3",
-      description: "Bản thảo chi tiết các khoản chi dự kiến.",
+      description: "Bản thảo chi tiết các khoản chi ngân sách dự kiến cho quý 3.",
       startTime: getRelativeDate(2, 10),
       endTime: getRelativeDate(2, 11),
       location: "Văn phòng",
       isDraft: true,
       isRecurring: false,
       priority: "LOW",
+      categoryTag: "Work",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      ownerId: adminUser.id,
+      title: "Draft: Khảo sát ý kiến khách hàng",
+      description: "Bản nháp câu hỏi khảo sát trải nghiệm người dùng cuối.",
+      startTime: getRelativeDate(3, 11),
+      endTime: getRelativeDate(3, 12),
+      location: "Online",
+      isDraft: true,
+      isRecurring: false,
+      priority: "MEDIUM",
+      categoryTag: "Marketing",
       source: "local",
       createdAt: new Date(),
       updatedAt: new Date()
@@ -154,6 +171,38 @@ function seedDatabase() {
       source: "local",
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      ownerId: normalUser.id,
+      title: "Draft: Kế hoạch ngân sách Q3",
+      description: "Bản thảo chi tiết các khoản chi ngân sách dự kiến cho quý 3.",
+      startTime: getRelativeDate(2, 10),
+      endTime: getRelativeDate(2, 11),
+      location: "Văn phòng",
+      isDraft: true,
+      isRecurring: false,
+      priority: "LOW",
+      categoryTag: "Work",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      ownerId: normalUser.id,
+      title: "Draft: Khảo sát ý kiến khách hàng",
+      description: "Bản nháp câu hỏi khảo sát trải nghiệm người dùng cuối.",
+      startTime: getRelativeDate(3, 11),
+      endTime: getRelativeDate(3, 12),
+      location: "Online",
+      isDraft: true,
+      isRecurring: false,
+      priority: "MEDIUM",
+      categoryTag: "Marketing",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ];
 
@@ -186,7 +235,7 @@ function seedDatabase() {
 
   mockStore.meeting.push(meeting1, meeting2);
 
-  // Mock Notifications
+  // Mock Notifications for Admin
   mockStore.notification.push(
     {
       id: generateUUID(),
@@ -195,18 +244,62 @@ function seedDatabase() {
       message: "Hệ thống Remindly phiên bản Dữ Liệu Giả Lập đã sẵn sàng hoạt động.",
       type: "SYSTEM",
       isRead: false,
+      createdAt: new Date(Date.now() - 3600000),
+      updatedAt: new Date(Date.now() - 3600000)
+    },
+    {
+      id: generateUUID(),
+      userId: adminUser.id,
+      title: "Nhắc nhở cuộc họp sắp diễn ra",
+      message: "Cuộc họp 'Họp Định Hướng Dự Án Remindly' sẽ bắt đầu sau 15 phút.",
+      type: "REMINDER",
+      isRead: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      userId: adminUser.id,
+      title: "Lời mời tham gia nhóm Remindly",
+      message: "Admin đã gửi lời mời tham gia workspace chung.",
+      type: "INVITE",
+      isRead: false,
+      createdAt: new Date(Date.now() - 7200000),
+      updatedAt: new Date(Date.now() - 7200000)
+    }
+  );
+
+  // Mock Notifications for Normal User
+  mockStore.notification.push(
+    {
+      id: generateUUID(),
+      userId: normalUser.id,
+      title: "Chào mừng bạn quay lại!",
+      message: "Hệ thống Remindly phiên bản Dữ Liệu Giả Lập đã sẵn sàng hoạt động.",
+      type: "SYSTEM",
+      isRead: false,
+      createdAt: new Date(Date.now() - 3600000),
+      updatedAt: new Date(Date.now() - 3600000)
+    },
+    {
+      id: generateUUID(),
+      userId: normalUser.id,
+      title: "Nhắc nhở cuộc họp sắp diễn ra",
+      message: "Cuộc họp của bạn sẽ bắt đầu sau 15 phút.",
+      type: "REMINDER",
+      isRead: false,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       id: generateUUID(),
       userId: normalUser.id,
-      title: "Chào mừng thành viên mới!",
-      message: "Chúc bạn có trải nghiệm tuyệt vời quản lý lịch trình với Remindly.",
-      type: "SYSTEM",
+      title: "Lời mời tham gia nhóm Remindly",
+      message: "Admin đã gửi lời mời tham gia workspace chung.",
+      type: "INVITE",
       isRead: false,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      createdAt: new Date(Date.now() - 7200000),
+      updatedAt: new Date(Date.now() - 7200000)
     }
   );
 }
@@ -339,9 +432,124 @@ class MockTableService<T extends { id: string }> {
       updatedAt: new Date()
     };
     
-    // Flatten relational connect/create logic if present
-    // Note: Simple mockup logic
     this.data.push(newItem);
+
+    // Auto-seed data for new user registrations / on-the-fly mock logins
+    if (this.tableName === 'user') {
+      const userId = newItem.id;
+      const today = new Date();
+      const getRelativeDate = (days: number, hours: number) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() + days);
+        d.setHours(hours, 0, 0, 0);
+        return d;
+      };
+
+      // Seed Events (Active)
+      mockStore.event.push(
+        {
+          id: generateUUID(),
+          ownerId: userId,
+          title: "Họp Định Hướng Dự Án Remindly",
+          description: "Thảo luận về các tính năng mới và kế hoạch phát triển hệ thống.",
+          startTime: getRelativeDate(0, 9),
+          endTime: getRelativeDate(0, 10.5),
+          location: "Google Meet",
+          isDraft: false,
+          isRecurring: false,
+          priority: "HIGH",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: generateUUID(),
+          ownerId: userId,
+          title: "Đánh Giá Tiến Độ Sprint",
+          description: "Xem xét các task đã hoàn thành và chuẩn bị cho sprint tiếp theo.",
+          startTime: getRelativeDate(1, 14),
+          endTime: getRelativeDate(1, 15),
+          location: "Phòng họp lớn lầu 3",
+          isDraft: false,
+          isRecurring: false,
+          priority: "MEDIUM",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      );
+
+      // Seed Drafts
+      mockStore.event.push(
+        {
+          id: generateUUID(),
+          ownerId: userId,
+          title: "Draft: Kế hoạch ngân sách Q3",
+          description: "Bản thảo chi tiết các khoản chi ngân sách dự kiến cho quý 3.",
+          startTime: getRelativeDate(2, 10),
+          endTime: getRelativeDate(2, 11),
+          location: "Văn phòng",
+          isDraft: true,
+          isRecurring: false,
+          priority: "LOW",
+          categoryTag: "Work",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: generateUUID(),
+          ownerId: userId,
+          title: "Draft: Khảo sát ý kiến khách hàng",
+          description: "Bản nháp câu hỏi khảo sát trải nghiệm người dùng cuối.",
+          startTime: getRelativeDate(3, 11),
+          endTime: getRelativeDate(3, 12),
+          location: "Online",
+          isDraft: true,
+          isRecurring: false,
+          priority: "MEDIUM",
+          categoryTag: "Marketing",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      );
+
+      // Seed Notifications
+      mockStore.notification.push(
+        {
+          id: generateUUID(),
+          userId: userId,
+          title: "Chào mừng bạn quay lại!",
+          message: "Hệ thống Remindly phiên bản Dữ Liệu Giả Lập đã sẵn sàng hoạt động.",
+          type: "SYSTEM",
+          isRead: false,
+          createdAt: new Date(Date.now() - 3600000), // 1 hour ago
+          updatedAt: new Date(Date.now() - 3600000)
+        },
+        {
+          id: generateUUID(),
+          userId: userId,
+          title: "Nhắc nhở cuộc họp sắp diễn ra",
+          message: "Cuộc họp của bạn sẽ bắt đầu sau 15 phút.",
+          type: "REMINDER",
+          isRead: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: generateUUID(),
+          userId: userId,
+          title: "Lời mời tham gia nhóm Remindly",
+          message: "Admin đã gửi lời mời tham gia workspace chung.",
+          type: "INVITE",
+          isRead: false,
+          createdAt: new Date(Date.now() - 7200000), // 2 hours ago
+          updatedAt: new Date(Date.now() - 7200000)
+        }
+      );
+    }
+
     return populateRelations(newItem, this.tableName);
   }
 
