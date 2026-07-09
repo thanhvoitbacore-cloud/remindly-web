@@ -41,3 +41,56 @@ body {
 .animate-tab-enter {
   animation: tabEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Light mode overrides for Tailwind v4 CSS variables */
+.theme-light {
+  --background: #f9fafb;
+  --foreground: #111827;
+  
+  --color-gray-950: #f9fafb;
+  --color-gray-900: #ffffff;
+  --color-gray-850: #f3f4f6;
+  --color-gray-800: #e5e7eb;
+  --color-gray-700: #d1d5db;
+  --color-gray-600: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-400: #4b5563;
+  --color-gray-300: #374151;
+  --color-gray-200: #1f2937;
+  --color-gray-100: #111827;
+  
+  --color-white: #111827;
+  
+  --color-slate-900: #f8fafc;
+  --color-slate-800: #f1f5f9;
+  --color-slate-700: #e2e8f0;
+  --color-slate-600: #cbd5e1;
+  --color-slate-500: #64748b;
+  --color-slate-400: #475569;
+  --color-slate-300: #334155;
+  --color-slate-200: #1e293b;
+  --color-slate-100: #0f172a;
+  
+  --color-indigo-950: #e0e7ff;
+  --color-indigo-900: #c7d2fe;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+}
+
+.theme-light .calendar-dark-theme {
+  background-color: #ffffff !important;
+  border-color: #e5e7eb !important;
+}
+
+.theme-light .rbc-calendar {
+  color: #111827 !important;
+}
+
+.theme-light .rbc-off-range-bg {
+  background-color: #f9fafb !important;
+}
+
+.theme-light .rbc-today {
+  background-color: #e0e7ff/30 !important;
+}
+

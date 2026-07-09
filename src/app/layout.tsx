@@ -20,6 +20,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            const savedTheme = localStorage.getItem("remindly-theme");
+            if (savedTheme === "light") {
+              document.documentElement.classList.add("theme-light");
+            }
+          })();
+        `}} />
+      </head>
       <body className="bg-gray-950 text-white min-h-screen">
         <NextTopLoader color="#6366f1" showSpinner={false} />
         {children}
