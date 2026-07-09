@@ -92,7 +92,7 @@ export default function CreateMeetingPage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
+        <div className="max-w-3xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
             <div>
                 <Link href="/dashboard" className="text-indigo-400 hover:text-indigo-300 text-sm font-medium mb-space-4 inline-block transition">
                     &larr; Quay lại

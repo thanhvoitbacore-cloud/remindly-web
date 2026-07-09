@@ -59,25 +59,25 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
     }
 
     return (
-        <form action={handleUpdate} className="space-y-8 bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-8 shadow-xl">
+        <form action={handleUpdate} className="space-y-space-8 bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl">
             {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-sm flex gap-3 items-center animate-in fade-in">
+                <div className="p-space-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-sm flex gap-space-3 items-center animate-in fade-in">
                     <AlertCircle className="w-5 h-5 shrink-0" />
-                    <p>{error}</p>
+                    <p className="body-premium text-red-500">{error}</p>
                 </div>
             )}
 
             {initialData.userRole === "ATTENDEE" && (
-                <div className="p-4 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-sm flex gap-3 items-center mb-6">
+                <div className="p-space-4 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-sm flex gap-space-3 items-center mb-space-6">
                     <AlertCircle className="w-5 h-5 shrink-0" />
-                    <p>You are an invitee to this event. You cannot edit its details, but you can manage your RSVP status below.</p>
+                    <p className="body-premium text-blue-400">You are an invitee to this event. You cannot edit its details, but you can manage your RSVP status below.</p>
                 </div>
             )}
 
             {/* Thông tin Cơ bản */}
-            <div className={`space-y-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
+            <div className={`space-y-space-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
                         Event Title
                     </label>
                     <div className="relative">
@@ -97,7 +97,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
                         Description
                     </label>
                     <div className="relative">
@@ -117,9 +117,9 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
             </div>
 
             {/* Phân loại Data */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-space-6 pt-space-2 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
                         Priority Level
                     </label>
                     <div className="relative">
@@ -139,7 +139,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
                         Category Tag
                     </label>
                     <CustomTagSelector 
@@ -151,13 +151,13 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
             </div>
 
             {/* Thời gian Setup */}
-            <div className={`bg-gray-950/50 rounded-2xl p-6 border border-gray-800 space-y-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
-                <h3 className="text-white font-medium flex gap-2 items-center">
+            <div className={`bg-gray-950/50 rounded-2xl p-space-6 border border-gray-800 space-y-space-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
+                <h3 className="h3-premium text-white flex gap-space-2 items-center">
                     <CalendarClock className="w-5 h-5 text-indigo-400" /> Time Setting
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-space-6">
                     <div>
-                        <label className="block text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">Date</label>
+                        <label className="block caption-premium text-gray-500 mb-space-1 uppercase tracking-wider font-semibold">Date</label>
                         <CustomDatePicker
                             name="date"
                             defaultValue={initialData.date}
@@ -166,7 +166,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                         />
                     </div>
                     <div>
-                        <label className="block text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">Start Time</label>
+                        <label className="block caption-premium text-gray-500 mb-space-1 uppercase tracking-wider font-semibold">Start Time</label>
                         <CustomTimePicker 
                             name="startTime" 
                             defaultValue={initialData.startTime} 
@@ -175,7 +175,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                         />
                     </div>
                     <div>
-                        <label className="block text-xs text-gray-500 mb-1 uppercase tracking-wider font-semibold">End Time</label>
+                        <label className="block caption-premium text-gray-500 mb-space-1 uppercase tracking-wider font-semibold">End Time</label>
                         <CustomTimePicker 
                             name="endTime" 
                             defaultValue={initialData.endTime} 
@@ -187,13 +187,13 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
             </div>
 
             {/* Action Buttons Zone */}
-            <div className="pt-6 border-t border-gray-800 flex flex-col-reverse md:flex-row items-center justify-between gap-4">
-                <div className="flex gap-3 w-full md:w-auto">
+            <div className="pt-space-6 border-t border-gray-800 flex flex-col-reverse md:flex-row items-center justify-between gap-space-4">
+                <div className="flex gap-space-3 w-full md:w-auto">
                     <button
                         type="button"
                         onClick={() => router.back()}
                         disabled={isSubmitting || isDeleting}
-                        className="flex-1 md:flex-none justify-center items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
+                        className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
                     >
                         <ArrowLeft className="w-4 h-4" /> Go Back
                     </button>
@@ -203,7 +203,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                             type="button"
                             onClick={handleDelete}
                             disabled={isSubmitting || isDeleting}
-                            className="flex-1 md:flex-none justify-center items-center gap-2 px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex group"
+                            className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex group"
                         >
                             {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />}
                             Delete
@@ -211,7 +211,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                     )}
                 </div>
 
-                <div className="flex gap-3 w-full md:w-auto">
+                <div className="flex gap-space-3 w-full md:w-auto">
                     {initialData.userRole === "HOST" ? (
                         <>
                             {initialData.isDraft && (
@@ -220,7 +220,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                                     name="actionType"
                                     value="draft"
                                     disabled={isSubmitting || isDeleting}
-                                    className="flex-1 md:flex-none justify-center items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
+                                    className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
                                 >
                                     Keep Draft
                                 </button>
@@ -230,15 +230,15 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                                 name="actionType"
                                 value="publish"
                                 disabled={isSubmitting || isDeleting}
-                                className="flex-1 md:flex-none justify-center items-center gap-2 px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50 inline-flex"
+                                className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-8 py-space-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50 inline-flex"
                             >
                                 {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                                 {initialData.isDraft ? "Publish Event" : "Save Changes"}
                             </button>
                         </>
                     ) : (
-                        <div className="flex gap-2 items-center">
-                            <span className="text-xs text-gray-500 mr-2 uppercase tracking-wide font-semibold flex items-center gap-2">
+                        <div className="flex gap-space-2 items-center">
+                            <span className="text-xs text-gray-500 mr-2 uppercase tracking-wide font-semibold flex items-center gap-space-2">
                                 RSVP Status:
                                 <span className={`px-2 py-1 rounded text-[10px] font-bold ${
                                     initialData.currentRsvp === "ACCEPTED" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
@@ -260,7 +260,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                                         router.refresh();
                                     }}
                                     disabled={isSubmitting}
-                                    className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-50 inline-flex"
+                                    className="px-space-6 py-space-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-50 inline-flex"
                                 >
                                     {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null} Accept
                                 </button>
@@ -277,7 +277,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                                         router.refresh();
                                     }}
                                     disabled={isSubmitting}
-                                    className="px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
+                                    className="px-space-6 py-space-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
                                 >
                                     {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null} Decline
                                 </button>

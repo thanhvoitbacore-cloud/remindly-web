@@ -59,13 +59,13 @@ export default async function EditEventPage(props: { params: Promise<{ id: strin
     };
 
     return (
-        <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-500 pb-12">
-            <header className="flex items-center justify-between pb-4 border-b border-gray-800">
+        <div className="max-w-3xl mx-auto space-y-space-6 animate-in fade-in duration-500 pb-space-12">
+            <header className="flex items-center justify-between pb-space-4 border-b border-gray-800">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+                    <h1 className="h1-premium text-white mb-space-2">
                         {event.isDraft ? "Resume Editing Draft" : "Sửa Sự kiện"}
                     </h1>
-                    <p className="text-gray-400">
+                    <p className="body-premium text-gray-400">
                         {event.isDraft
                             ? "Complete your draft to move it to the official calendar."
                             : "Update existing event settings and details."

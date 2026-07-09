@@ -20,7 +20,7 @@ export default async function NotificationsPage() {
     });
 
     return (
-        <div className="max-w-7xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
+        <div className="max-w-4xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
             <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-4 pb-space-6 border-b border-gray-800">
                 <div>
                     <h1 className="h1-premium text-white mb-space-2">Lịch sử thông báo</h1>
