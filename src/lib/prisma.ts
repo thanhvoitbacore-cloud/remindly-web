@@ -383,6 +383,179 @@ function populateRelations(item: any, tableName: string) {
   return newItem;
 }
 
+function extractUserId(where: any): string | null {
+  if (!where) return null;
+  if (typeof where.ownerId === 'string') return where.ownerId;
+  if (typeof where.userId === 'string') return where.userId;
+  if (typeof where.id === 'string') return where.id;
+  if (typeof where.email === 'string') {
+    const user = mockStore.user.find(u => u.email === where.email);
+    if (user) return user.id;
+    return where.email;
+  }
+  if (Array.isArray(where.OR)) {
+    for (const cond of where.OR) {
+      const id = extractUserId(cond);
+      if (id) return id;
+    }
+  }
+  if (Array.isArray(where.AND)) {
+    for (const cond of where.AND) {
+      const id = extractUserId(cond);
+      if (id) return id;
+    }
+  }
+  return null;
+}
+
+function ensureSeededForUser(idOrEmail: string) {
+  if (idOrEmail === "fallback-id") return;
+
+  let userId = idOrEmail;
+  let userEmail = idOrEmail;
+  if (idOrEmail.includes('@')) {
+    const user = mockStore.user.find(u => u.email === idOrEmail);
+    if (user) {
+      userId = user.id;
+    } else {
+      userId = generateUUID();
+    }
+  } else {
+    const user = mockStore.user.find(u => u.id === idOrEmail);
+    if (user) {
+      userEmail = user.email;
+    } else {
+      userEmail = `${userId}@remindly.mock`;
+    }
+  }
+
+  const hasEvents = mockStore.event.some(e => e.ownerId === userId);
+  if (hasEvents) return;
+
+  const today = new Date();
+  const getRelativeDate = (days: number, hours: number) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + days);
+    d.setHours(hours, 0, 0, 0);
+    return d;
+  };
+
+  mockStore.event.push(
+    {
+      id: generateUUID(),
+      ownerId: userId,
+      title: "Họp Định Hướng Dự Án Remindly",
+      description: "Thảo luận về các tính năng mới và kế hoạch phát triển hệ thống.",
+      startTime: getRelativeDate(0, 9),
+      endTime: getRelativeDate(0, 10.5),
+      location: "Google Meet",
+      isDraft: false,
+      isRecurring: false,
+      priority: "HIGH",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      ownerId: userId,
+      title: "Đánh Giá Tiến Độ Sprint",
+      description: "Xem xét các task đã hoàn thành và chuẩn bị cho sprint tiếp theo.",
+      startTime: getRelativeDate(1, 14),
+      endTime: getRelativeDate(1, 15),
+      location: "Phòng họp lớn lầu 3",
+      isDraft: false,
+      isRecurring: false,
+      priority: "MEDIUM",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      ownerId: userId,
+      title: "Draft: Kế hoạch ngân sách Q3",
+      description: "Bản thảo chi tiết các khoản chi ngân sách dự kiến cho quý 3.",
+      startTime: getRelativeDate(2, 10),
+      endTime: getRelativeDate(2, 11),
+      location: "Văn phòng",
+      isDraft: true,
+      isRecurring: false,
+      priority: "LOW",
+      categoryTag: "Work",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      ownerId: userId,
+      title: "Draft: Khảo sát ý kiến khách hàng",
+      description: "Bản nháp câu hỏi khảo sát trải nghiệm người dùng cuối.",
+      startTime: getRelativeDate(3, 11),
+      endTime: getRelativeDate(3, 12),
+      location: "Online",
+      isDraft: true,
+      isRecurring: false,
+      priority: "MEDIUM",
+      categoryTag: "Marketing",
+      source: "local",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  );
+
+  mockStore.notification.push(
+    {
+      id: generateUUID(),
+      userId: userId,
+      title: "Chào mừng bạn quay lại!",
+      message: "Hệ thống Remindly phiên bản Dữ Liệu Giả Lập đã sẵn sàng hoạt động.",
+      type: "SYSTEM",
+      isRead: false,
+      createdAt: new Date(Date.now() - 3600000),
+      updatedAt: new Date(Date.now() - 3600000)
+    },
+    {
+      id: generateUUID(),
+      userId: userId,
+      title: "Nhắc nhở cuộc họp sắp diễn ra",
+      message: "Cuộc họp của bạn sẽ bắt đầu sau 15 phút.",
+      type: "REMINDER",
+      isRead: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: generateUUID(),
+      userId: userId,
+      title: "Lời mời tham gia nhóm Remindly",
+      message: "Admin đã gửi lời mời tham gia workspace chung.",
+      type: "INVITE",
+      isRead: false,
+      createdAt: new Date(Date.now() - 7200000),
+      updatedAt: new Date(Date.now() - 7200000)
+    }
+  );
+
+  const userExists = mockStore.user.some(u => u.id === userId || u.email === userEmail);
+  if (!userExists) {
+    const name = userEmail.includes('@') ? userEmail.split('@')[0] : "Remindly User";
+    mockStore.user.push({
+      id: userId,
+      email: userEmail,
+      phoneNumber: "0987654321",
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      avatar: null,
+      role: "USER",
+      accountStatus: "ACTIVE",
+      autoSyncCalendars: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+  }
+}
+
 // Creates Mock Service Factory for individual tables
 class MockTableService<T extends { id: string }> {
   constructor(private tableName: keyof typeof mockStore) {}
@@ -396,6 +569,9 @@ class MockTableService<T extends { id: string }> {
   }
 
   async findMany(args?: any) {
+    const userId = extractUserId(args?.where);
+    if (userId) ensureSeededForUser(userId);
+
     let result = this.data.filter(item => matchFilter(item, args?.where));
     result = sortItems(result, args?.orderBy);
     
@@ -411,111 +587,10 @@ class MockTableService<T extends { id: string }> {
   }
 
   async findFirst(args?: any) {
-    let result = this.data.find(item => matchFilter(item, args?.where));
-    if (!result && this.tableName === 'user') {
-      const searchId = args?.where?.id || "fallback-id";
-      const searchEmail = args?.where?.email || (args?.where?.id ? `${args.where.id}@remindly.mock` : "user@remindly.com");
-      const searchPhone = args?.where?.phoneNumber || "0987654321";
-      const name = searchEmail.includes('@') ? searchEmail.split('@')[0] : "Remindly User";
+    const userId = extractUserId(args?.where);
+    if (userId) ensureSeededForUser(userId);
 
-      const fallbackUser = {
-        id: searchId,
-        email: searchEmail,
-        phoneNumber: searchPhone,
-        name: name.charAt(0).toUpperCase() + name.slice(1),
-        avatar: null,
-        role: "USER",
-        accountStatus: "ACTIVE",
-        autoSyncCalendars: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-      
-      this.data.push(fallbackUser as any);
-      
-      const today = new Date();
-      const getRelativeDate = (days: number, hours: number) => {
-        const d = new Date(today);
-        d.setDate(d.getDate() + days);
-        d.setHours(hours, 0, 0, 0);
-        return d;
-      };
-
-      mockStore.event.push(
-        {
-          id: generateUUID(),
-          ownerId: searchId,
-          title: "Họp Định Hướng Dự Án Remindly",
-          description: "Thảo luận về các tính năng mới và kế hoạch phát triển hệ thống.",
-          startTime: getRelativeDate(0, 9),
-          endTime: getRelativeDate(0, 10.5),
-          location: "Google Meet",
-          isDraft: false,
-          isRecurring: false,
-          priority: "HIGH",
-          source: "local",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: generateUUID(),
-          ownerId: searchId,
-          title: "Draft: Kế hoạch ngân sách Q3",
-          description: "Bản thảo chi tiết các khoản chi ngân sách dự kiến cho quý 3.",
-          startTime: getRelativeDate(2, 10),
-          endTime: getRelativeDate(2, 11),
-          location: "Văn phòng",
-          isDraft: true,
-          isRecurring: false,
-          priority: "LOW",
-          categoryTag: "Work",
-          source: "local",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: generateUUID(),
-          ownerId: searchId,
-          title: "Draft: Khảo sát ý kiến khách hàng",
-          description: "Bản nháp câu hỏi khảo sát trải nghiệm người dùng cuối.",
-          startTime: getRelativeDate(3, 11),
-          endTime: getRelativeDate(3, 12),
-          location: "Online",
-          isDraft: true,
-          isRecurring: false,
-          priority: "MEDIUM",
-          categoryTag: "Marketing",
-          source: "local",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
-
-      mockStore.notification.push(
-        {
-          id: generateUUID(),
-          userId: searchId,
-          title: "Chào mừng bạn quay lại!",
-          message: "Hệ thống Remindly phiên bản Dữ Liệu Giả Lập đã sẵn sàng hoạt động.",
-          type: "SYSTEM",
-          isRead: false,
-          createdAt: new Date(Date.now() - 3600000),
-          updatedAt: new Date(Date.now() - 3600000)
-        },
-        {
-          id: generateUUID(),
-          userId: searchId,
-          title: "Nhắc nhở cuộc họp sắp diễn ra",
-          message: "Cuộc họp của bạn sẽ bắt đầu sau 15 phút.",
-          type: "REMINDER",
-          isRead: false,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
-
-      result = fallbackUser as any;
-    }
+    const result = this.data.find(item => matchFilter(item, args?.where));
     return populateRelations(result, this.tableName) || null;
   }
 
