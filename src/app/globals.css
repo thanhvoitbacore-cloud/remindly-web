@@ -44,53 +44,123 @@ body {
 
 /* Light mode overrides for Tailwind v4 CSS variables */
 .theme-light {
-  --background: #f9fafb;
-  --foreground: #111827;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   
-  --color-gray-950: #f9fafb;
+  --color-gray-950: #f1f5f9;
   --color-gray-900: #ffffff;
-  --color-gray-850: #f3f4f6;
-  --color-gray-800: #e5e7eb;
-  --color-gray-700: #d1d5db;
-  --color-gray-600: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-400: #4b5563;
-  --color-gray-300: #374151;
-  --color-gray-200: #1f2937;
-  --color-gray-100: #111827;
+  --color-gray-850: #f8fafc;
+  --color-gray-800: #e2e8f0;
+  --color-gray-700: #cbd5e1;
+  --color-gray-600: #94a3b8;
+  --color-gray-500: #475569;
+  --color-gray-400: #334155;
+  --color-gray-300: #1e293b;
+  --color-gray-200: #0f172a;
+  --color-gray-100: #020617;
   
-  --color-white: #111827;
-  
-  --color-slate-900: #f8fafc;
+  --color-slate-900: #ffffff;
   --color-slate-800: #f1f5f9;
   --color-slate-700: #e2e8f0;
   --color-slate-600: #cbd5e1;
-  --color-slate-500: #64748b;
-  --color-slate-400: #475569;
-  --color-slate-300: #334155;
-  --color-slate-200: #1e293b;
-  --color-slate-100: #0f172a;
+  --color-slate-500: #475569;
+  --color-slate-400: #334155;
+  --color-slate-300: #1e293b;
+  --color-slate-200: #0f172a;
+  --color-slate-100: #020617;
+  
+  --color-white: #0f172a;
   
   --color-indigo-950: #e0e7ff;
   --color-indigo-900: #c7d2fe;
-  --color-indigo-500: #6366f1;
+  --color-indigo-800: #a5b4fc;
+  --color-indigo-700: #4f46e5;
   --color-indigo-600: #4f46e5;
+  --color-indigo-500: #6366f1;
+  --color-indigo-400: #4f46e5;
+  --color-indigo-300: #4338ca;
+  --color-indigo-200: #3730a3;
+  --color-indigo-100: #1e1b4b;
+  
+  --color-emerald-400: #059669;
+  --color-cyan-400: #0891b2;
+  --color-amber-400: #b45309;
+  --color-amber-500: #d97706;
 }
 
+/* Force high contrast white text for buttons & links with colored backgrounds in light mode */
+.theme-light .bg-indigo-600,
+.theme-light .bg-indigo-500,
+.theme-light .bg-blue-600,
+.theme-light .bg-sky-600,
+.theme-light .bg-emerald-600,
+.theme-light .bg-emerald-500,
+.theme-light .bg-amber-500,
+.theme-light .bg-red-600,
+.theme-light .bg-red-500 {
+  color: #ffffff !important;
+}
+
+.theme-light .bg-indigo-600 *,
+.theme-light .bg-indigo-500 *,
+.theme-light .bg-blue-600 *,
+.theme-light .bg-sky-600 *,
+.theme-light .bg-emerald-600 *,
+.theme-light .bg-emerald-500 *,
+.theme-light .bg-amber-500 *,
+.theme-light .bg-red-600 *,
+.theme-light .bg-red-500 * {
+  color: #ffffff !important;
+}
+
+/* Override hardcoded dark datepicker/timepicker panels in light mode */
+.theme-light .bg-\[\#11131a\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  ring: 1px solid rgba(0, 0, 0, 0.04) !important;
+}
+
+.theme-light .bg-\[\#11131a\] * {
+  border-color: #f1f5f9 !important;
+}
+
+/* Fix active nav icon and text in light mode */
+.theme-light aside a.bg-gray-800 {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Calendar styling fixes in light mode */
 .theme-light .calendar-dark-theme {
   background-color: #ffffff !important;
-  border-color: #e5e7eb !important;
+  border-color: #e2e8f0 !important;
 }
 
 .theme-light .rbc-calendar {
-  color: #111827 !important;
+  color: #0f172a !important;
 }
 
 .theme-light .rbc-off-range-bg {
-  background-color: #f9fafb !important;
+  background-color: #f8fafc !important;
 }
 
 .theme-light .rbc-today {
-  background-color: #e0e7ff/30 !important;
+  background-color: rgba(99, 102, 241, 0.05) !important;
 }
+
+.theme-light .rbc-event {
+  background-color: #e0e7ff !important;
+  border: 1px solid #c7d2fe !important;
+  color: #4338ca !important;
+}
+
+.theme-light .rbc-event-content {
+  color: #4338ca !important;
+}
+
+.theme-light .rbc-day-bg:hover {
+  background-color: #f1f5f9 !important;
+}
+
 
