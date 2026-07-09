@@ -9,14 +9,29 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
     const [isOpen, setIsOpen] = useState(true);
     const pathname = usePathname();
 
-    const navItems = [
-        { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", color: "text-gray-400" },
-        { href: "/calendar", icon: CalendarDays, label: "Master Calendar", color: "text-indigo-400" },
-        { href: "/meetings/create", icon: Users, label: "Meetings", color: "text-emerald-400" },
-        { href: "/drafts", icon: FileEdit, label: "Drafts", color: "text-amber-400" },
-        { href: "/sync-center", icon: LinkIcon, label: "Sync Center", color: "text-cyan-400" },
-        { href: "/notifications", icon: History, label: "Notifications", color: "text-gray-400" },
-        { href: "/dashboard/settings", icon: Settings, label: "Settings", color: "text-gray-400" }
+    const sections = [
+        {
+            title: "NAVIGATE",
+            items: [
+                { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", color: "text-gray-400" },
+                { href: "/calendar", icon: CalendarDays, label: "Master Calendar", color: "text-indigo-400" },
+            ]
+        },
+        {
+            title: "MANAGE",
+            items: [
+                { href: "/meetings/create", icon: Users, label: "Meetings", color: "text-emerald-400" },
+                { href: "/drafts", icon: FileEdit, label: "Drafts", color: "text-amber-400" },
+                { href: "/sync-center", icon: LinkIcon, label: "Sync Center", color: "text-cyan-400" },
+            ]
+        },
+        {
+            title: "ACCOUNT",
+            items: [
+                { href: "/notifications", icon: History, label: "Notifications", color: "text-gray-400" },
+                { href: "/dashboard/settings", icon: Settings, label: "Settings", color: "text-gray-400" }
+            ]
+        }
     ];
 
     return (
@@ -45,21 +60,33 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                    </div>
                 )}
 
-                <nav className={`mt-2 ${isOpen ? 'px-4' : 'px-2'} space-y-2`}>
-                    {navItems.map(item => {
-                        const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
-                        return (
-                            <Link 
-                                key={item.href} 
-                                href={item.href} 
-                                className={`flex items-center gap-3 py-3 rounded-xl transition ${isActive ? 'bg-gray-800 text-white' : 'hover:bg-gray-800 text-gray-400 hover:text-gray-200'} ${isOpen ? 'px-4' : 'justify-center px-0'}`} 
-                                title={!isOpen ? item.label : undefined}
-                            >
-                                <item.icon className={`w-5 h-5 shrink-0 ${isActive ? item.color : ''} ${!isActive && item.color !== 'text-gray-400' ? item.color : ''}`} />
-                                {isOpen && <span className={`truncate ${isActive ? 'font-medium' : ''}`}>{item.label}</span>}
-                            </Link>
-                        )
-                    })}
+                <nav className={`mt-2 ${isOpen ? 'px-4' : 'px-2'} space-y-4`}>
+                    {sections.map((section, sIdx) => (
+                        <div key={section.title} className="space-y-1.5">
+                            {isOpen ? (
+                                <div className="text-[10px] font-bold tracking-widest text-gray-500 uppercase px-4 mb-2 mt-4 first:mt-0 select-none">
+                                    {section.title}
+                                </div>
+                            ) : sIdx > 0 && (
+                                <div className="border-t border-gray-800/40 my-3 mx-2" />
+                            )}
+                            
+                            {section.items.map(item => {
+                                const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+                                return (
+                                    <Link 
+                                        key={item.href} 
+                                        href={item.href} 
+                                        className={`flex items-center gap-3 py-3 rounded-xl transition ${isActive ? 'bg-gray-800 text-white' : 'hover:bg-gray-800 text-gray-400 hover:text-gray-200'} ${isOpen ? 'px-4' : 'justify-center px-0'}`} 
+                                        title={!isOpen ? item.label : undefined}
+                                    >
+                                        <item.icon className={`w-5 h-5 shrink-0 ${isActive ? item.color : ''} ${!isActive && item.color !== 'text-gray-400' ? item.color : ''}`} />
+                                        {isOpen && <span className={`truncate ${isActive ? 'font-medium' : ''}`}>{item.label}</span>}
+                                    </Link>
+                                )
+                            })}
+                        </div>
+                    ))}
                 </nav>
             </div>
 

@@ -6,6 +6,22 @@
   --foreground: #fafafa; /* zinc-50 */
 }
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  /* Systemic Spacing Scale */
+  --spacing-space-1: 4px;
+  --spacing-space-2: 8px;
+  --spacing-space-3: 12px;
+  --spacing-space-4: 16px;
+  --spacing-space-6: 24px;
+  --spacing-space-8: 32px;
+  --spacing-space-12: 48px;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -17,6 +33,42 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   letter-spacing: -0.02em;
+}
+
+/* Systemic Typography Scale Utilities */
+.h1-premium {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.875rem; /* 30px */
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.h2-premium {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.h3-premium {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem; /* 16px */
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.body-premium {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.625;
+}
+
+.caption-premium {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem; /* 12px */
+  line-height: 1;
 }
 
 /* Custom premium scrollbar */
