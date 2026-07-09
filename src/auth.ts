@@ -16,49 +16,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                console.log("Login attempt:", credentials?.username);
+                console.log("Mock login attempt:", credentials?.username);
 
-                if (!credentials?.username || !credentials?.password) {
+                if (!credentials?.username) {
                     return null;
                 }
 
                 const username = credentials.username as string;
-                const password = credentials.password as string;
 
-                // Admin Hardcoded Check
-                if (username === "admin@remindly") {
-                    if (password === "2042001") {
-                        return { id: "admin-hardcoded", email: "admin@remindly", role: "ADMIN" };
-                    }
-                    return null;
-                }
+                // Simple check: username should contain '@' or be alphanumeric
+                const isEmail = username.includes("@");
 
-                // Standard User Parsing
-                let user = null;
-                if (username.includes("@")) {
-                    user = await prisma.user.findFirst({
-                        where: { email: username }
+                // Find or auto-create the user in our mock database
+                let user = await prisma.user.findFirst({
+                    where: isEmail ? { email: username } : { phoneNumber: username }
+                });
+
+                if (!user) {
+                    // Auto-create user on the fly so they can log in immediately!
+                    const name = isEmail ? username.split('@')[0] : username;
+                    user = await prisma.user.create({
+                        data: {
+                            name: name.charAt(0).toUpperCase() + name.slice(1),
+                            email: isEmail ? username : `${username}@remindly.mock`,
+                            phoneNumber: !isEmail ? username : null,
+                            role: "USER",
+                            accountStatus: "ACTIVE",
+                            passwordHash: "mocked"
+                        }
                     });
-                } else {
-                    user = await prisma.user.findFirst({
-                        where: { phoneNumber: username }
-                    });
                 }
 
-                if (!user || !user.passwordHash) {
-                    console.log("Login failed: User not found or has no password hash.");
-                    return null;
-                }
-
-                const { comparePasswords } = await import("@/lib/auth");
-                const valid = await comparePasswords(password, user.passwordHash);
-
-                if (!valid) {
-                    console.log("Login failed: bcrypt.compare returned false for user:", user.email || user.phoneNumber);
-                    return null;
-                }
-                
-                console.log("Login success for user:", user.email || user.phoneNumber);
+                console.log("Mock login success for user:", user.email || user.phoneNumber);
 
                 return {
                     id: user.id,

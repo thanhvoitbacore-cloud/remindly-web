@@ -19,11 +19,6 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
     return null;
   }
 
-  if (session.user.id === "admin-hardcoded") {
-    redirect("/admin/overview");
-    return null;
-  }
-
   const q = searchParams.q;
   const priorityParam = searchParams.priority as "LOW" | "MEDIUM" | "HIGH" | undefined;
   const tagParam = searchParams.tag;

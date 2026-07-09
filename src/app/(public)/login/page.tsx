@@ -48,11 +48,7 @@ export default function LoginPage() {
             if (res?.error) {
                 setErrorMsg(res.error || "Lỗi đăng nhập.");
             } else {
-                if (username === "admin@remindly") {
-                    router.push("/admin/overview");
-                } else {
-                    router.push("/dashboard");
-                }
+                router.push("/dashboard");
                 router.refresh();
             }
         } catch (err: unknown) {

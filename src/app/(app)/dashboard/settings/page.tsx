@@ -10,11 +10,6 @@ export default async function SettingsPage() {
         return null;
     }
 
-    if (session.user.id === "admin-hardcoded") {
-        redirect("/admin/overview");
-        return null;
-    }
-
     const user = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: {
