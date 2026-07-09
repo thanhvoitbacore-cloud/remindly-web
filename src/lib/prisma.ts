@@ -411,7 +411,111 @@ class MockTableService<T extends { id: string }> {
   }
 
   async findFirst(args?: any) {
-    const result = this.data.find(item => matchFilter(item, args?.where));
+    let result = this.data.find(item => matchFilter(item, args?.where));
+    if (!result && this.tableName === 'user') {
+      const searchId = args?.where?.id || "fallback-id";
+      const searchEmail = args?.where?.email || (args?.where?.id ? `${args.where.id}@remindly.mock` : "user@remindly.com");
+      const searchPhone = args?.where?.phoneNumber || "0987654321";
+      const name = searchEmail.includes('@') ? searchEmail.split('@')[0] : "Remindly User";
+
+      const fallbackUser = {
+        id: searchId,
+        email: searchEmail,
+        phoneNumber: searchPhone,
+        name: name.charAt(0).toUpperCase() + name.slice(1),
+        avatar: null,
+        role: "USER",
+        accountStatus: "ACTIVE",
+        autoSyncCalendars: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      this.data.push(fallbackUser as any);
+      
+      const today = new Date();
+      const getRelativeDate = (days: number, hours: number) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() + days);
+        d.setHours(hours, 0, 0, 0);
+        return d;
+      };
+
+      mockStore.event.push(
+        {
+          id: generateUUID(),
+          ownerId: searchId,
+          title: "Họp Định Hướng Dự Án Remindly",
+          description: "Thảo luận về các tính năng mới và kế hoạch phát triển hệ thống.",
+          startTime: getRelativeDate(0, 9),
+          endTime: getRelativeDate(0, 10.5),
+          location: "Google Meet",
+          isDraft: false,
+          isRecurring: false,
+          priority: "HIGH",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: generateUUID(),
+          ownerId: searchId,
+          title: "Draft: Kế hoạch ngân sách Q3",
+          description: "Bản thảo chi tiết các khoản chi ngân sách dự kiến cho quý 3.",
+          startTime: getRelativeDate(2, 10),
+          endTime: getRelativeDate(2, 11),
+          location: "Văn phòng",
+          isDraft: true,
+          isRecurring: false,
+          priority: "LOW",
+          categoryTag: "Work",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: generateUUID(),
+          ownerId: searchId,
+          title: "Draft: Khảo sát ý kiến khách hàng",
+          description: "Bản nháp câu hỏi khảo sát trải nghiệm người dùng cuối.",
+          startTime: getRelativeDate(3, 11),
+          endTime: getRelativeDate(3, 12),
+          location: "Online",
+          isDraft: true,
+          isRecurring: false,
+          priority: "MEDIUM",
+          categoryTag: "Marketing",
+          source: "local",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      );
+
+      mockStore.notification.push(
+        {
+          id: generateUUID(),
+          userId: searchId,
+          title: "Chào mừng bạn quay lại!",
+          message: "Hệ thống Remindly phiên bản Dữ Liệu Giả Lập đã sẵn sàng hoạt động.",
+          type: "SYSTEM",
+          isRead: false,
+          createdAt: new Date(Date.now() - 3600000),
+          updatedAt: new Date(Date.now() - 3600000)
+        },
+        {
+          id: generateUUID(),
+          userId: searchId,
+          title: "Nhắc nhở cuộc họp sắp diễn ra",
+          message: "Cuộc họp của bạn sẽ bắt đầu sau 15 phút.",
+          type: "REMINDER",
+          isRead: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      );
+
+      result = fallbackUser as any;
+    }
     return populateRelations(result, this.tableName) || null;
   }
 
