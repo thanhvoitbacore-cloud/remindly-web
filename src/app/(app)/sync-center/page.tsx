@@ -25,21 +25,19 @@ export default async function SyncCenterPage() {
     const outlookAccount = accounts.find(a => a.provider === "OUTLOOK") || null;
 
     return (
-        <main className="flex-1 overflow-y-auto bg-gray-900 min-h-screen text-white">
-            <div className="p-8 max-w-5xl mx-auto w-full">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-gray-800 gap-4">
-                    <div>
-                        <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Trung tâm Đồng bộ</h1>
-                        <p className="text-gray-400">Quản lý kết nối lịch Google và Outlook để theo dõi công việc liền mạch.</p>
-                    </div>
+        <div className="max-w-7xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
+            <header className="flex flex-col md:flex-row md:items-end justify-between pb-space-6 border-b border-gray-800 gap-space-4">
+                <div>
+                    <h1 className="h1-premium text-white mb-space-2">Trung tâm Đồng bộ</h1>
+                    <p className="body-premium text-gray-400">Quản lý kết nối lịch Google và Outlook để theo dõi công việc liền mạch.</p>
                 </div>
+            </header>
 
-                <SyncCenterClient 
-                    googleAccount={googleAccount} 
-                    outlookAccount={outlookAccount} 
-                    initialAutoSync={user?.autoSyncCalendars || false}
-                />
-            </div>
-        </main>
+            <SyncCenterClient 
+                googleAccount={googleAccount} 
+                outlookAccount={outlookAccount} 
+                initialAutoSync={user?.autoSyncCalendars || false}
+            />
+        </div>
     );
 }

@@ -128,19 +128,19 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
     };
 
     return (
-        <div className="space-y-10 pb-20">
+        <div className="space-y-space-10 pb-space-20">
 
             {/* Section 1: Profile */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-8 shadow-xl">
-                <div className="flex items-center gap-3 mb-6">
+            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl">
+                <div className="flex items-center gap-space-3 mb-space-6">
                     <User className="w-6 h-6 text-indigo-400" />
-                    <h2 className="text-xl font-bold text-white">Public Profile</h2>
+                    <h2 className="h2-premium text-white">Public Profile</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-space-6">
+                    <div className="space-y-space-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">Display Name</label>
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2">Display Name</label>
                             <input
                                 type="text"
                                 value={name}
@@ -149,7 +149,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">Profile Picture</label>
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2">Profile Picture</label>
                             <div className="relative">
                                 <input
                                     type="file"
@@ -160,7 +160,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                                 <button
                                     type="button"
                                     onClick={() => {}}
-                                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-950 border border-gray-800 hover:border-gray-700 rounded-xl text-gray-300 hover:text-white transition focus:outline-none focus:border-indigo-500"
+                                    className="w-full flex items-center justify-center gap-space-2 px-space-4 py-space-2.5 bg-gray-950 border border-gray-800 hover:border-gray-700 rounded-xl text-gray-300 hover:text-white transition focus:outline-none focus:border-indigo-500"
                                 >
                                     <Upload className="w-4 h-4" />
                                     Choose Image...
@@ -169,7 +169,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-800 rounded-xl bg-gray-950/50 relative overflow-hidden group">
+                    <div className="flex flex-col items-center justify-center p-space-6 border-2 border-dashed border-gray-800 rounded-xl bg-gray-950/50 relative overflow-hidden group">
                         {previewUrl ? (
                             <img src={previewUrl} alt="Avatar Preview" className="w-24 h-24 rounded-full object-cover border-4 border-indigo-500/20 shadow-lg" />
                         ) : (
@@ -180,15 +180,15 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                         <div className="absolute inset-0 bg-black/50 invisible group-hover:visible flex items-center justify-center transition-all cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                             <Upload className="w-6 h-6 text-white" />
                         </div>
-                        <span className="text-xs font-medium text-gray-500 mt-4 uppercase tracking-wider">Avatar Preview</span>
+                        <span className="caption-premium font-medium text-gray-500 mt-space-4 uppercase tracking-wider">Avatar Preview</span>
                     </div>
                 </div>
 
-                <div className="mt-8 flex justify-end">
+                <div className="mt-space-8 flex justify-end">
                     <button
                         disabled={isUpdatingProfile}
                         onClick={handleProfileSubmit}
-                        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50"
+                        className="px-space-6 py-space-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50"
                     >
                         {isUpdatingProfile ? "Saving..." : "Save Profile"}
                     </button>
@@ -196,21 +196,21 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
             </section>
 
             {/* Section 2: Security */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-8 shadow-xl">
-                <div className="flex items-center gap-3 mb-6">
+            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl">
+                <div className="flex items-center gap-space-3 mb-space-6">
                     <Shield className="w-6 h-6 text-emerald-400" />
-                    <h2 className="text-xl font-bold text-white">Security & Identifiers</h2>
+                    <h2 className="h2-premium text-white">Security & Identifiers</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-8 gap-y-space-10">
 
                     {/* Unique Identifier Changes */}
-                    <div className="space-y-6">
-                        <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500">Primary Contact</h3>
+                    <div className="space-y-space-6">
+                        <h3 className="caption-premium font-semibold uppercase tracking-wider text-gray-500">Primary Contact</h3>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2"><Mail className="w-4 h-4 text-gray-500" /> Email Address</label>
-                            <div className="flex gap-2">
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2 flex items-center gap-space-2"><Mail className="w-4 h-4 text-gray-500" /> Email Address</label>
+                            <div className="flex gap-space-2">
                                 <input
                                     type="email"
                                     value={email}
@@ -224,8 +224,8 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2"><Smartphone className="w-4 h-4 text-gray-500" /> Phone Number</label>
-                            <div className="flex gap-2">
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2 flex items-center gap-space-2"><Smartphone className="w-4 h-4 text-gray-500" /> Phone Number</label>
+                            <div className="flex gap-space-2">
                                 <input
                                     type="tel"
                                     value={phone}
@@ -240,9 +240,9 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
 
                         {/* Animated OTP Dropdown */}
                         {isOtpSent && optIdentifier && (
-                            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mt-4 animate-in slide-in-from-top-4 fade-in">
-                                <label className="block text-sm text-emerald-300 mb-2 font-medium">Validation Code sent to {optIdentifier}</label>
-                                <div className="flex gap-2">
+                            <div className="p-space-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mt-space-4 animate-in slide-in-from-top-4 fade-in">
+                                <label className="block body-premium text-emerald-300 mb-space-2 font-medium">Validation Code sent to {optIdentifier}</label>
+                                <div className="flex gap-space-2">
                                     <input
                                         type="text"
                                         placeholder="000000"
@@ -259,11 +259,11 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                     </div>
 
                     {/* Password Shift */}
-                    <div className="space-y-6">
-                        <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500">Authentication</h3>
+                    <div className="space-y-space-6">
+                        <h3 className="caption-premium font-semibold uppercase tracking-wider text-gray-500">Authentication</h3>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2"><KeyRound className="w-4 h-4 text-gray-500" /> Current Password</label>
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2 flex items-center gap-space-2"><KeyRound className="w-4 h-4 text-gray-500" /> Current Password</label>
                             <input
                                 type="password"
                                 value={oldPassword}
@@ -272,7 +272,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">New Password</label>
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2">New Password</label>
                             <input
                                 type="password"
                                 value={newPassword}
@@ -281,7 +281,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">Confirm New Password</label>
+                            <label className="block body-premium font-medium text-gray-400 mb-space-2">Confirm New Password</label>
                             <input
                                 type="password"
                                 value={confirmPassword}
@@ -294,7 +294,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                             <button
                                 disabled={isPasswordLoading || !oldPassword || !newPassword}
                                 onClick={handlePasswordSubmit}
-                                className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50"
+                                className="px-space-6 py-space-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50"
                             >
                                 {isPasswordLoading ? "Updating..." : "Update Password"}
                             </button>
@@ -305,21 +305,21 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
             </section>
 
             {/* Section 3: Theme Preferences */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-8 shadow-xl mt-12">
-                <div className="flex items-center gap-3 mb-6">
+            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl mt-space-12">
+                <div className="flex items-center gap-space-3 mb-space-6">
                     <Sun className="w-6 h-6 text-amber-400" />
-                    <h2 className="text-xl font-bold text-white">Appearance</h2>
+                    <h2 className="h2-premium text-white">Appearance</h2>
                 </div>
 
-                <div className="p-6 bg-gray-950/50 border-l-4 border-amber-500/50 rounded-r-xl flex items-center justify-between">
+                <div className="p-space-6 bg-gray-950/50 border-l-4 border-amber-500/50 rounded-r-xl flex items-center justify-between">
                     <div>
-                        <h3 className="text-base font-semibold text-gray-200">Interface Theme</h3>
-                        <p className="text-sm text-gray-500 mt-1">Switch between Dark Mode and Light Mode.</p>
+                        <h3 className="h3-premium text-gray-200">Interface Theme</h3>
+                        <p className="body-premium text-gray-500 mt-space-1">Switch between Dark Mode and Light Mode.</p>
                     </div>
                     <div className="pl-6">
                         <button
                             onClick={toggleTheme}
-                            className="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 hover:border-gray-600 rounded-xl text-sm font-medium transition flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                            className="px-space-4 py-space-2 bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 hover:border-gray-600 rounded-xl text-sm font-medium transition flex items-center gap-2 cursor-pointer whitespace-nowrap"
                         >
                             {theme === "dark" ? (
                                 <>
@@ -338,19 +338,19 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
             </section>
 
             {/* Section 4: Account Actions */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-8 shadow-xl mt-12 !border-red-500/20 relative overflow-hidden">
+            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl mt-space-12 !border-red-500/20 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl" />
 
                 <div className="relative">
-                    <div className="flex items-center gap-3 mb-6">
+                    <div className="flex items-center gap-space-3 mb-space-6">
                         <Settings2 className="w-6 h-6 text-red-400" />
-                        <h2 className="text-xl font-bold text-white">Account Actions</h2>
+                        <h2 className="h2-premium text-white">Account Actions</h2>
                     </div>
 
-                    <div className="p-6 bg-gray-950/50 border-l-4 border-red-500/50 rounded-r-xl flex items-center justify-between">
+                    <div className="p-space-6 bg-gray-950/50 border-l-4 border-red-500/50 rounded-r-xl flex items-center justify-between">
                         <div>
-                            <h3 className="text-base font-semibold text-gray-200">Logout</h3>
-                            <p className="text-sm text-gray-500 mt-1">This will instantly sign you out of your account on this device. Protected pages will no longer be available until you authenticate again.</p>
+                            <h3 className="h3-premium text-gray-200">Logout</h3>
+                            <p className="body-premium text-gray-500 mt-space-1">This will instantly sign you out of your account on this device. Protected pages will no longer be available until you authenticate again.</p>
                         </div>
                         <div className="pl-6">
                             <LogoutButton />

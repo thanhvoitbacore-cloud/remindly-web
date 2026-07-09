@@ -132,20 +132,20 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
         const isConnected = !!account;
 
         return (
-            <div className={`flex flex-col p-6 rounded-2xl border ${isConnected ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-800/20 border-gray-800'} backdrop-blur-sm transition-all duration-300 hover:border-gray-600`}>
-                <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                        <div className={`p-3 rounded-xl ${isConnected ? color : 'bg-gray-800 text-gray-400'}`}>
+            <div className={`flex flex-col p-space-6 rounded-2xl border ${isConnected ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-800/20 border-gray-800'} backdrop-blur-sm transition-all duration-300 hover:border-gray-600`}>
+                <div className="flex items-start justify-between mb-space-6">
+                    <div className="flex items-center gap-space-4">
+                        <div className={`p-space-3 rounded-xl ${isConnected ? color : 'bg-gray-800 text-gray-400'}`}>
                             <Icon className="w-8 h-8" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-semibold text-white">{name}</h3>
-                            <div className="flex items-center gap-2 mt-1">
+                            <h3 className="h2-premium text-white">{name}</h3>
+                            <div className="flex items-center gap-space-2 mt-space-1">
                                 <span className="relative flex h-2.5 w-2.5">
                                     {isConnected && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>}
                                     <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isConnected ? 'bg-emerald-500' : 'bg-gray-500'}`}></span>
                                 </span>
-                                <span className={`text-sm font-medium ${isConnected ? 'text-emerald-400' : 'text-gray-500'}`}>
+                                <span className={`body-premium font-medium ${isConnected ? 'text-emerald-400' : 'text-gray-500'}`}>
                                     {isConnected ? 'Đã kết nối' : 'Đã ngắt kết nối'}
                                 </span>
                             </div>
@@ -154,24 +154,24 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
                 </div>
 
                 {isConnected && (
-                    <div className="mt-auto mb-6 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
-                        <p className="text-xs text-gray-400 mb-1">Đồng bộ lần cuối</p>
-                        <p className="text-sm font-medium text-gray-200">{formatDate(account.lastSyncTime)}</p>
+                    <div className="mt-auto mb-space-6 bg-gray-900/50 p-space-4 rounded-xl border border-gray-800">
+                        <p className="caption-premium text-gray-400 mb-space-1">Đồng bộ lần cuối</p>
+                        <p className="body-premium font-medium text-gray-200">{formatDate(account.lastSyncTime)}</p>
                     </div>
                 )}
                 
                 {!isConnected && (
-                    <div className="mt-auto mb-6 p-4">
-                        <p className="text-sm text-gray-400">Kết nối tài khoản để tự động đồng bộ sự kiện vào hệ thống Remindly của bạn.</p>
+                    <div className="mt-auto mb-space-6 p-space-4">
+                        <p className="body-premium text-gray-400">Kết nối tài khoản để tự động đồng bộ sự kiện vào hệ thống Remindly của bạn.</p>
                     </div>
                 )}
 
-                <div className="mt-auto pt-4 border-t border-gray-800">
+                <div className="mt-auto pt-space-4 border-t border-gray-800">
                     {isConnected ? (
                         <button 
                             onClick={() => handleUnlink(provider)}
                             disabled={unlinkingProvider === provider}
-                            className={`w-full py-2.5 flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors ${unlinkingProvider === provider ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20'}`}
+                            className={`w-full py-space-2.5 flex items-center justify-center gap-space-2 rounded-lg text-sm font-medium transition-colors ${unlinkingProvider === provider ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20'}`}
                         >
                             {unlinkingProvider === provider ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Unlink className="w-4 h-4" />}
                             Hủy kết nối
@@ -184,8 +184,8 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
                                 setSelectedEmail("");
                                 setCustomEmail("");
                                 setMockError("");
-                            }}
-                            className={`w-full py-2.5 flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors text-white ${provider === 'GOOGLE' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-sky-600 hover:bg-sky-700'}`}
+                             }}
+                            className={`w-full py-space-2.5 flex items-center justify-center gap-space-2 rounded-lg text-sm font-medium transition-colors text-white ${provider === 'GOOGLE' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-sky-600 hover:bg-sky-700'}`}
                         >
                             <LinkIcon className="w-4 h-4" />
                             Kết nối {name}
@@ -197,21 +197,21 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
     };
 
     return (
-        <div className="space-y-8">
-            <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-transparent border border-indigo-500/20 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-sm">
-                <div className="flex items-center gap-4 text-indigo-200">
-                    <div className="p-3 bg-indigo-500/20 rounded-full">
+        <div className="space-y-space-8">
+            <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-transparent border border-indigo-500/20 rounded-2xl p-space-6 flex flex-col md:flex-row items-center justify-between gap-space-6 backdrop-blur-sm">
+                <div className="flex items-center gap-space-4 text-indigo-200">
+                    <div className="p-space-3 bg-indigo-500/20 rounded-full">
                         <RefreshCw className={`w-6 h-6 text-indigo-400 ${isSyncing ? 'animate-spin' : ''}`} />
                     </div>
                     <div>
-                        <h2 className="font-semibold text-lg text-white">Đồng bộ toàn cầu</h2>
-                        <p className="text-sm text-indigo-300">Buộc đồng bộ tức thì cho tất cả các tài khoản đã kết nối của bạn.</p>
+                        <h2 className="h3-premium text-white">Đồng bộ toàn cầu</h2>
+                        <p className="body-premium text-indigo-300">Buộc đồng bộ tức thì cho tất cả các tài khoản đã kết nối của bạn.</p>
                     </div>
                 </div>
                 <button 
                     onClick={handleForceSync}
                     disabled={isSyncing || (!googleAccount && !outlookAccount)}
-                    className="shrink-0 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-white rounded-xl font-medium transition shadow-lg shadow-indigo-500/25 flex items-center gap-2"
+                    className="shrink-0 px-space-6 py-space-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-white rounded-xl font-medium transition shadow-lg shadow-indigo-500/25 flex items-center gap-space-2"
                 >
                     {isSyncing ? <RefreshCw className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
                     {syncProgress === 100 ? "Hoàn tất!" : isSyncing ? `${syncProgress}% Đang đồng bộ...` : "Đồng bộ ngay"}
@@ -229,13 +229,13 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
             )}
 
             {syncMessage && (
-                <div className={`p-4 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 ${syncMessage.type === 'success' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+                <div className={`p-space-4 rounded-xl flex items-center gap-space-3 animate-in fade-in slide-in-from-top-4 ${syncMessage.type === 'success' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
                     {syncMessage.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <RefreshCw className="w-5 h-5" />}
-                    <p className="font-medium text-sm">{syncMessage.text}</p>
+                    <p className="body-premium font-medium">{syncMessage.text}</p>
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-space-6">
                 <ProviderCard 
                     provider="GOOGLE"
                     name="Google Calendar"
@@ -255,10 +255,10 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
                 />
             </div>
 
-            <div className="bg-gray-800/40 border border-gray-700 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="bg-gray-800/40 border border-gray-700 rounded-2xl p-space-6 flex flex-col md:flex-row items-center justify-between gap-space-6">
                 <div>
-                    <h3 className="text-lg font-semibold text-white">Đồng bộ tự động</h3>
-                    <p className="text-sm text-gray-400 mt-1">Hệ thống sẽ giả định tự động kéo sự kiện về mỗi 10 phút liên tục 24/7 khi được bật.</p>
+                    <h3 className="h3-premium text-white">Đồng bộ tự động</h3>
+                    <p className="body-premium text-gray-400 mt-space-1">Hệ thống sẽ giả định tự động kéo sự kiện về mỗi 10 phút liên tục 24/7 khi được bật.</p>
                 </div>
                 <button
                     onClick={handleToggleAutoSync}
@@ -270,11 +270,11 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
                 </button>
             </div>
 
-            <div className="bg-gray-800/30 border-l-4 border-amber-500 p-4 rounded-r-xl">
-                <div className="flex gap-3">
+            <div className="bg-gray-800/30 border-l-4 border-amber-500 p-space-4 rounded-r-xl">
+                <div className="flex gap-space-3">
                     <Lock className="w-5 h-5 text-amber-500 shrink-0" />
-                    <div className="text-sm">
-                        <p className="text-gray-300 font-medium mb-1">Quyền riêng tư & Bảo mật</p>
+                    <div className="body-premium">
+                        <p className="text-gray-300 font-medium mb-space-1">Quyền riêng tư & Bảo mật</p>
                         <p className="text-gray-400">Remindly chỉ yêu cầu quyền Đọc & Ghi lịch để đồng bộ sự kiện vào hệ thống. Chúng tôi không thu thập emails hay thông tin cá nhân khác.</p>
                     </div>
                 </div>
