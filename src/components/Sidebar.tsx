@@ -1,13 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, LayoutDashboard, Settings, User, Users, FileEdit, ChevronLeft, ChevronRight, History, Link as LinkIcon, Hexagon } from "lucide-react";
+import { CalendarDays, LayoutDashboard, Settings, User, Users, FileEdit, ChevronLeft, ChevronRight, History, Link as LinkIcon, Hexagon, Sun, Moon } from "lucide-react";
 
 export default function Sidebar({ session, notificationBell }: { session: any, notificationBell?: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(true);
     const pathname = usePathname();
+    const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("remindly-theme") as "dark" | "light" || "dark";
+        setTheme(savedTheme);
+    }, []);
+
+    const toggleTheme = () => {
+        const nextTheme = theme === "dark" ? "light" : "dark";
+        setTheme(nextTheme);
+        localStorage.setItem("remindly-theme", nextTheme);
+        if (nextTheme === "light") {
+            document.documentElement.classList.add("theme-light");
+        } else {
+            document.documentElement.classList.remove("theme-light");
+        }
+    };
 
     const sections = [
         {
@@ -90,7 +107,7 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                 </nav>
             </div>
 
-            <div className={`p-6 border-t border-gray-800 flex items-center ${isOpen ? 'justify-between' : 'justify-center'}`}>
+            <div className={`p-6 border-t border-gray-800 flex ${isOpen ? 'flex-row items-center justify-between' : 'flex-col items-center gap-4'}`}>
                 <div className="flex items-center gap-3 overflow-hidden">
                     <div className="w-10 h-10 shrink-0 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/30 overflow-hidden">
                         {session?.user?.image ? (
@@ -105,6 +122,14 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                         </div>
                     )}
                 </div>
+
+                <button 
+                    onClick={toggleTheme}
+                    className="p-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-xl transition border border-gray-800 hover:border-gray-700 cursor-pointer"
+                    title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                    {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}
+                </button>
             </div>
         </aside>
     );

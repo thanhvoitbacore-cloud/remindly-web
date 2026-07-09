@@ -171,7 +171,11 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
                         <button 
                             onClick={() => handleUnlink(provider)}
                             disabled={unlinkingProvider === provider}
-                            className={`w-full py-space-2.5 flex items-center justify-center gap-space-2 rounded-lg text-sm font-medium transition-colors ${unlinkingProvider === provider ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20'}`}
+                            className={`w-full py-space-3 flex items-center justify-center gap-space-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                                unlinkingProvider === provider 
+                                ? 'bg-gray-800/40 text-gray-500 border border-gray-800 cursor-not-allowed' 
+                                : 'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500 shadow-sm shadow-red-500/5 hover:shadow-md hover:shadow-red-500/10'
+                            }`}
                         >
                             {unlinkingProvider === provider ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Unlink className="w-4 h-4" />}
                             Hủy kết nối
@@ -185,7 +189,11 @@ export default function SyncCenterClient({ googleAccount, outlookAccount, initia
                                 setCustomEmail("");
                                 setMockError("");
                              }}
-                            className={`w-full py-space-2.5 flex items-center justify-center gap-space-2 rounded-lg text-sm font-medium transition-colors text-white ${provider === 'GOOGLE' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-sky-600 hover:bg-sky-700'}`}
+                            className={`w-full py-space-3 flex items-center justify-center gap-space-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-white ${
+                                provider === 'GOOGLE' 
+                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-600/10 hover:shadow-lg hover:shadow-blue-500/20 border border-blue-500/30' 
+                                : 'bg-gradient-to-r from-sky-600 to-blue-500 hover:from-sky-500 hover:to-blue-400 shadow-md shadow-sky-600/10 hover:shadow-lg hover:shadow-sky-500/20 border border-sky-500/30'
+                            }`}
                         >
                             <LinkIcon className="w-4 h-4" />
                             Kết nối {name}
