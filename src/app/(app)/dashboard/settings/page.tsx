@@ -23,10 +23,10 @@ export default async function SettingsPage() {
     if (!user) return null;
 
     return (
-        <div className="max-w-3xl mx-auto space-y-space-8 animate-in fade-in duration-500">
+        <div className="max-w-4xl mx-auto space-y-space-8 animate-in fade-in duration-500">
             <div>
-                <h1 className="h1-premium text-white mb-space-2">Account Settings</h1>
-                <p className="body-premium text-gray-400">Manage your profile, security preferences, and personal details.</p>
+                <h1 className="h1-premium text-text-main mb-space-2">Account Settings</h1>
+                <p className="body-premium text-text-muted">Manage your profile, security preferences, and personal details.</p>
             </div>
 
             {/* We extract the interactive UI to a Client Component to manage the complex OTP and Password states cleanly */}

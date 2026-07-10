@@ -52,11 +52,11 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
     ];
 
     return (
-        <aside className={`${isOpen ? 'w-64' : 'w-20'} bg-gray-900 border-r border-gray-800 flex-col justify-between hidden md:flex transition-all duration-300 relative shrink-0 z-50`}>
+        <aside className={`${isOpen ? 'w-64' : 'w-20'} bg-bg-surface border-r border-border-subtle flex-col justify-between hidden md:flex transition-all duration-300 relative shrink-0 z-50`}>
             {/* Toggle Button */}
             <button 
                 onClick={() => setIsOpen(!isOpen)}
-                className="absolute -right-3 top-8 bg-gray-800 border border-gray-700 text-gray-300 hover:text-white rounded-full p-1 z-50 transition shadow-md"
+                className="absolute -right-3 top-8 bg-bg-primary border border-border-subtle text-text-muted hover:text-text-main rounded-full p-1 z-50 transition shadow-md"
                 title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
             >
                 {isOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -65,7 +65,7 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
             <div className="overflow-visible w-full">
                 <div className={`p-6 flex items-center ${isOpen ? 'justify-between' : 'justify-center'} overflow-visible`}>
                     <Link href="/dashboard" className="flex items-center gap-2">
-                        <Hexagon className={`w-6 h-6 fill-indigo-500 text-indigo-400 shrink-0 ${!isOpen && 'mb-2'}`} />
+                        <Hexagon className={`w-6 h-6 fill-accent-primary text-accent-primary shrink-0 ${!isOpen && 'mb-2'}`} />
                         {isOpen && <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent cursor-pointer truncate">Remindly.</h1>}
                     </Link>
                     {isOpen && notificationBell}
@@ -81,11 +81,11 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                     {sections.map((section, sIdx) => (
                         <div key={section.title} className="space-y-1.5">
                             {isOpen ? (
-                                <div className="text-[10px] font-bold tracking-widest text-gray-500 uppercase px-4 mb-2 mt-4 first:mt-0 select-none">
+                                <div className="text-[10px] font-bold tracking-widest text-text-muted/60 uppercase px-4 mb-2 mt-4 first:mt-0 select-none">
                                     {section.title}
                                 </div>
                             ) : sIdx > 0 && (
-                                <div className="border-t border-gray-800/40 my-3 mx-2" />
+                                <div className="border-t border-border-subtle/40 my-3 mx-2" />
                             )}
                             
                             {section.items.map(item => {
@@ -94,7 +94,7 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                                     <Link 
                                         key={item.href} 
                                         href={item.href} 
-                                        className={`flex items-center gap-3 py-3 rounded-xl transition ${isActive ? 'bg-gray-800 text-white' : 'hover:bg-gray-800 text-gray-400 hover:text-gray-200'} ${isOpen ? 'px-4' : 'justify-center px-0'}`} 
+                                        className={`flex items-center gap-3 py-3 rounded-xl transition ${isActive ? 'bg-bg-primary text-text-main border-l-2 border-accent-primary' : 'hover:bg-bg-primary/50 text-text-muted hover:text-text-main'} ${isOpen ? 'px-4' : 'justify-center px-0'}`} 
                                         title={!isOpen ? item.label : undefined}
                                     >
                                         <item.icon className={`w-5 h-5 shrink-0 ${isActive ? item.color : ''} ${!isActive && item.color !== 'text-gray-400' ? item.color : ''}`} />
@@ -107,9 +107,9 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                 </nav>
             </div>
 
-            <div className={`p-6 border-t border-gray-800 flex ${isOpen ? 'flex-row items-center justify-between' : 'flex-col items-center gap-4'}`}>
+            <div className={`p-6 border-t border-border-subtle flex ${isOpen ? 'flex-row items-center justify-between' : 'flex-col items-center gap-4'}`}>
                 <div className="flex items-center gap-3 overflow-hidden">
-                    <div className="w-10 h-10 shrink-0 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/30 overflow-hidden">
+                    <div className="w-10 h-10 shrink-0 rounded-full bg-accent-primary/20 flex items-center justify-center text-accent-primary font-bold border border-accent-primary/30 overflow-hidden">
                         {session?.user?.image ? (
                             <img src={session.user.image} alt="User Avatar" className="w-full h-full object-cover" />
                         ) : (
@@ -118,14 +118,14 @@ export default function Sidebar({ session, notificationBell }: { session: any, n
                     </div>
                     {isOpen && (
                         <div className="overflow-hidden">
-                            <p className="text-sm font-medium text-white truncate">{session?.user?.name || "User"}</p>
+                            <p className="text-sm font-medium text-text-main truncate">{session?.user?.name || "User"}</p>
                         </div>
                     )}
                 </div>
 
                 <button 
                     onClick={toggleTheme}
-                    className="p-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-xl transition border border-gray-800 hover:border-gray-700 cursor-pointer"
+                    className="p-2.5 bg-bg-primary hover:bg-bg-surface text-text-muted hover:text-text-main rounded-xl transition border border-border-subtle cursor-pointer"
                     title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
                 >
                     {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}

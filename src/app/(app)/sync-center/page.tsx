@@ -26,10 +26,10 @@ export default async function SyncCenterPage() {
 
     return (
         <div className="max-w-5xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
-            <header className="flex flex-col md:flex-row md:items-end justify-between pb-space-6 border-b border-gray-800 gap-space-4">
+            <header className="flex flex-col md:flex-row md:items-end justify-between pb-space-6 border-b border-border-subtle gap-space-4">
                 <div>
-                    <h1 className="h1-premium text-white mb-space-2">Trung tâm Đồng bộ</h1>
-                    <p className="body-premium text-gray-400">Quản lý kết nối lịch Google và Outlook để theo dõi công việc liền mạch.</p>
+                    <h1 className="h1-premium text-text-main mb-space-2">Trung tâm Đồng bộ</h1>
+                    <p className="body-premium text-text-muted">Quản lý kết nối lịch Google và Outlook để theo dõi công việc liền mạch.</p>
                 </div>
             </header>
 

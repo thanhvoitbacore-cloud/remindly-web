@@ -46,13 +46,13 @@ function CreateEventForm() {
     }
 
     return (
-        <div className="max-w-3xl mx-auto space-y-space-8 animate-in fade-in duration-500">
+        <div className="max-w-4xl mx-auto space-y-space-8 animate-in fade-in duration-500">
             <div>
-                <Link href="/dashboard" className="text-indigo-400 hover:text-indigo-300 text-sm font-medium mb-space-4 inline-block transition">
+                <Link href="/dashboard" className="text-accent-primary hover:opacity-80 text-sm font-medium mb-space-4 inline-block transition">
                     &larr; Back to Dashboard
                 </Link>
-                <h1 className="h1-premium text-white mb-space-2">Create New Event</h1>
-                <p className="body-premium text-gray-400">Schedule your upcoming tasks, appointments, or remainders.</p>
+                <h1 className="h1-premium text-text-main mb-space-2">Create New Event</h1>
+                <p className="body-premium text-text-muted">Schedule your upcoming tasks, appointments, or remainders.</p>
             </div>
 
             {error && (
@@ -62,45 +62,45 @@ function CreateEventForm() {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-space-6 bg-gray-900 border border-gray-800 p-space-8 rounded-2xl shadow-xl">
+            <form onSubmit={handleSubmit} className="space-y-space-6 bg-bg-surface border border-border-subtle p-space-8 rounded-2xl shadow-xl">
                 <div className="space-y-space-4">
                     {/* Title */}
                     <div>
-                        <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
-                            <Bookmark className="w-4 h-4 text-indigo-400" /> Event Title *
+                        <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
+                            <Bookmark className="w-4 h-4 text-accent-primary" /> Event Title *
                         </label>
                         <input
                             required
                             type="text"
                             name="title"
                             placeholder="Engineering Sync, Doctor Appointment..."
-                            className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white placeholder:text-gray-600 transition"
+                            className="w-full bg-bg-primary border border-border-subtle outline-none focus:ring-2 focus:ring-accent-primary/30 rounded-xl p-3.5 text-text-main placeholder:text-text-muted/50 transition"
                         />
                     </div>
 
                     {/* Description */}
                     <div>
-                        <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
-                            <AlignLeft className="w-4 h-4 text-indigo-400" /> Description
+                        <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
+                            <AlignLeft className="w-4 h-4 text-accent-primary" /> Description
                         </label>
                         <textarea
                             name="description"
                             rows={3}
                             placeholder="Add notes or location details here..."
-                            className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white placeholder:text-gray-600 transition resize-none"
+                            className="w-full bg-bg-primary border border-border-subtle outline-none focus:ring-2 focus:ring-accent-primary/30 rounded-xl p-3.5 text-text-main placeholder:text-text-muted/50 transition resize-none"
                         />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-space-6">
                         {/* Priority */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <AlertCircle className="w-4 h-4 text-orange-400" /> Priority Level
                             </label>
                             <select
                                 name="priority"
                                 defaultValue="MEDIUM"
-                                className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white transition appearance-none"
+                                className="w-full bg-bg-primary border border-border-subtle outline-none focus:ring-2 focus:ring-accent-primary/30 rounded-xl p-3.5 text-text-main transition appearance-none"
                             >
                                 <option value="LOW">Low - Whenever possible</option>
                                 <option value="MEDIUM">Medium - Normal schedule</option>
@@ -110,7 +110,7 @@ function CreateEventForm() {
 
                         {/* Category */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <Tag className="w-4 h-4 text-emerald-400" /> Category Tag
                             </label>
                             <CustomTagSelector name="categoryTag" />
@@ -120,7 +120,7 @@ function CreateEventForm() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-space-6 pt-space-2">
                         {/* Date */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <CalendarIcon className="w-4 h-4 text-purple-400" /> Date *
                             </label>
                             <CustomDatePicker
@@ -132,7 +132,7 @@ function CreateEventForm() {
 
                         {/* Start Time */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <Clock className="w-4 h-4 text-purple-400" /> Start Time *
                             </label>
                             <CustomTimePicker name="startTime" required />
@@ -140,7 +140,7 @@ function CreateEventForm() {
 
                         {/* End Time */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <Clock className="w-4 h-4 text-purple-400" /> End Time *
                             </label>
                             <CustomTimePicker name="endTime" required />
@@ -148,14 +148,14 @@ function CreateEventForm() {
                     </div>
                 </div>
 
-                <div className="pt-space-6 border-t border-gray-800 flex flex-col-reverse md:flex-row items-center justify-end gap-space-3 md:gap-space-4">
+                <div className="pt-space-6 border-t border-border-subtle flex flex-col-reverse md:flex-row items-center justify-end gap-space-3 md:gap-space-4">
                     {/* Hành động Save As Draft */}
                     <button
                         type="submit"
                         name="action"
                         value="draft"
                         disabled={loading}
-                        className="w-full md:w-auto px-space-6 py-space-3 rounded-xl font-medium text-sm text-gray-300 bg-gray-800 hover:bg-gray-700 hover:text-white transition disabled:opacity-50"
+                        className="w-full md:w-auto px-space-6 py-space-3 rounded-xl font-medium text-sm text-text-muted bg-bg-primary hover:bg-bg-surface border border-border-subtle hover:text-text-main transition disabled:opacity-50 cursor-pointer"
                     >
                         Save as Draft
                     </button>

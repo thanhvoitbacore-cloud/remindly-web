@@ -54,10 +54,10 @@ export default async function CalendarPage() {
 
     return (
         <div className="max-w-7xl w-full mx-auto space-y-space-6 animate-in fade-in duration-500 h-[calc(100vh-theme(spacing.24))]">
-            <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-4 pb-space-4 border-b border-gray-800">
+            <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-4 pb-space-4 border-b border-border-subtle">
                 <div>
-                    <h1 className="h1-premium text-white mb-space-2">Master Calendar</h1>
-                    <p className="body-premium text-gray-400">View and manage all your events, meetings, and schedules across the platform.</p>
+                    <h1 className="h1-premium text-text-main mb-space-2">Master Calendar</h1>
+                    <p className="body-premium text-text-muted">View and manage all your events, meetings, and schedules across the platform.</p>
                 </div>
                 <div className="w-full md:w-auto">
                     <a href="/events/create" className="px-space-4 py-space-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] w-full block md:inline-block text-center">

@@ -77,20 +77,20 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
 
   return (
     <div className="space-y-space-8 animate-in fade-in duration-500">
-      <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-4 pb-space-6 border-b border-gray-800">
+      <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-4 pb-space-6 border-b border-border-subtle">
         <div>
-          <h2 className="h1-premium bg-clip-text text-transparent bg-gradient-to-r from-gray-100 to-gray-400">
+          <h2 className="h1-premium text-text-main">
             Welcome back!
           </h2>
-          <p className="body-premium text-gray-400 mt-space-1">Here is your schedule for today.</p>
+          <p className="body-premium text-text-muted mt-space-1">Here is your schedule for today.</p>
         </div>
       </header>
 
       <div className="max-w-7xl space-y-space-4">
         <div>
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-space-4 gap-space-4">
-            <h3 className="h2-premium flex items-center gap-space-2 text-white">
-              <Clock className="w-5 h-5 text-indigo-400" />
+            <h3 className="h2-premium flex items-center gap-space-2 text-text-main">
+              <Clock className="w-5 h-5 text-accent-primary" />
               Upcoming Agenda
             </h3>
             <Link href="/events/create" className="px-space-4 py-space-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] w-full md:w-auto text-center">
@@ -101,10 +101,10 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
           <DashboardFilter availableTags={availableTags} />
 
           {events.length === 0 ? (
-            <div className="p-space-8 text-center rounded-2xl bg-gray-900 border border-gray-800 flex flex-col items-center justify-center">
-              <CalendarIcon className="w-12 h-12 text-gray-700 mb-space-4" />
-              <h3 className="h2-premium text-gray-300">No events found</h3>
-              <p className="body-premium text-gray-500 mt-space-2 max-w-sm">
+            <div className="p-space-8 text-center rounded-2xl bg-bg-surface border border-border-subtle flex flex-col items-center justify-center">
+              <CalendarIcon className="w-12 h-12 text-text-muted mb-space-4" />
+              <h3 className="h2-premium text-text-main">No events found</h3>
+              <p className="body-premium text-text-muted mt-space-2 max-w-sm">
                 You don&apos;t have any upcoming events. Create a new event or sync your external calendars to see them here.
               </p>
               <div className="flex gap-space-4 mt-space-6">
@@ -117,12 +117,12 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
             events.map(event => {
               const parsedTag = event.categoryTag ? parseTag(event.categoryTag) : null;
               return (
-              <div key={event.id} className="p-space-6 rounded-2xl bg-gray-900 border border-gray-800 hover:border-indigo-500/50 transition self-start group relative overflow-hidden">
-                <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${parsedTag ? parsedTag.color : 'bg-gray-700'}`} />
+              <div key={event.id} className="p-space-6 rounded-2xl bg-bg-surface border border-border-subtle hover:border-accent-primary/50 transition self-start group relative overflow-hidden">
+                <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${parsedTag ? parsedTag.color : 'bg-text-muted'}`} />
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
                 <div className="flex-1 min-w-0 relative z-10">
                   <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-space-2 md:mb-space-1 gap-space-2 md:gap-0">
-                    <h4 className="h3-premium text-white truncate pr-0 md:pr-space-4">{event.title}</h4>
+                    <h4 className="h3-premium text-text-main truncate pr-0 md:pr-space-4">{event.title}</h4>
                     <div className="flex items-center shrink-0">
                       {event.priority === "HIGH" && (
                         <span className="px-space-2 py-0.5 mr-space-2 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase">
@@ -131,7 +131,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
                       )}
                       <Link
                         href={`/events/edit/${event.id}`}
-                        className="p-1.5 bg-gray-800 hover:bg-indigo-600 rounded-md text-gray-400 hover:text-white transition"
+                        className="p-1.5 bg-bg-primary hover:bg-accent-primary rounded-md text-text-muted hover:text-white transition"
                         title="Edit Event"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 Z" /></svg>
@@ -142,18 +142,18 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
                 </div>
                 {event.categoryTag && (
                   <div className="mt-space-2 mb-space-3">
-                    <span className="inline-flex items-center gap-space-2 px-space-2 py-0.5 rounded bg-gray-950 border border-gray-800 caption-premium text-gray-300">
-                      <span className={`w-2 h-2 rounded-full ${parsedTag ? parsedTag.color : 'bg-gray-500'}`} />
+                    <span className="inline-flex items-center gap-space-2 px-space-2 py-0.5 rounded bg-bg-primary border border-border-subtle caption-premium text-text-main">
+                      <span className={`w-2 h-2 rounded-full ${parsedTag ? parsedTag.color : 'bg-text-muted'}`} />
                       {parsedTag ? parsedTag.label : event.categoryTag}
                     </span>
                   </div>
                 )}
                 {event.description && (
-                  <p className="body-premium text-gray-400 mb-space-4 line-clamp-2 relative">
+                  <p className="body-premium text-text-muted mb-space-4 line-clamp-2 relative">
                     {event.description}
                   </p>
                 )}
-                <div className="flex items-center gap-space-4 caption-premium text-gray-500 relative mt-space-4">
+                <div className="flex items-center gap-space-4 caption-premium text-text-muted relative mt-space-4">
                   <div className="flex items-center gap-space-2">
                     <CalendarIcon className="w-4 h-4" />
                     {format(event.startTime, "MMM d, h:mm a")} - {format(event.endTime, "h:mm a")}
@@ -164,7 +164,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ [ke
                     </div>
                   )}
                   {event.meetings.length > 0 && (
-                    <div className="flex items-center gap-space-2 text-blue-400">
+                    <div className="flex items-center gap-space-2 text-accent-primary">
                       Virtual Meeting ({event.meetings[0].provider})
                     </div>
                   )}

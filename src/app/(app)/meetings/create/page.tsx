@@ -94,23 +94,23 @@ export default function CreateMeetingPage() {
     return (
         <div className="max-w-3xl mx-auto space-y-space-8 animate-in fade-in duration-500 pb-space-12">
             <div>
-                <Link href="/dashboard" className="text-indigo-400 hover:text-indigo-300 text-sm font-medium mb-space-4 inline-block transition">
+                <Link href="/dashboard" className="text-accent-primary hover:opacity-80 text-sm font-medium mb-space-4 inline-block transition">
                     &larr; Quay lại
                 </Link>
-                <h1 className="h1-premium text-white mb-space-2">Khởi Tạo Cuộc Họp</h1>
-                <p className="body-premium text-gray-400 mb-space-6">Chọn lên lịch trước hoặc mở ngay một phiên họp tức thì.</p>
+                <h1 className="h1-premium text-text-main mb-space-2">Khởi Tạo Cuộc Họp</h1>
+                <p className="body-premium text-text-muted mb-space-6">Chọn lên lịch trước hoặc mở ngay một phiên họp tức thì.</p>
 
                 {/* Tabs */}
-                <div className="flex bg-gray-900 border border-gray-800 rounded-xl p-0.5 w-full max-w-sm mb-space-8">
+                <div className="flex bg-bg-surface border border-border-subtle rounded-xl p-0.5 w-full max-w-sm mb-space-8">
                     <button
                         onClick={() => setMeetingType("SCHEDULED")}
-                        className={`flex-1 flex items-center justify-center gap-space-2 py-2.5 rounded-lg text-sm font-medium transition ${meetingType === "SCHEDULED" ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'}`}
+                        className={`flex-1 flex items-center justify-center gap-space-2 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer ${meetingType === "SCHEDULED" ? 'bg-indigo-600 text-white shadow-md' : 'text-text-muted hover:text-text-main hover:bg-bg-primary'}`}
                     >
                         <CalendarIcon className="w-4 h-4" /> Lên Lịch Họp (Scheduled)
                     </button>
                     <button
                         onClick={() => setMeetingType("INSTANT")}
-                        className={`flex-1 flex items-center justify-center gap-space-2 py-2.5 rounded-lg text-sm font-medium transition ${meetingType === "INSTANT" ? 'bg-amber-500 text-gray-900 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'}`}
+                        className={`flex-1 flex items-center justify-center gap-space-2 py-2.5 rounded-lg text-sm font-medium transition cursor-pointer ${meetingType === "INSTANT" ? 'bg-amber-500 text-gray-900 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'text-text-muted hover:text-text-main hover:bg-bg-primary'}`}
                     >
                         <Zap className="w-4 h-4" /> Khởi Tạo Ngay (Instant)
                     </button>
@@ -148,29 +148,29 @@ export default function CreateMeetingPage() {
 
             <div className="relative">
             {loadingActive ? (
-                <div className="p-space-12 flex justify-center items-center bg-gray-900 border border-gray-800 rounded-2xl shadow-xl">
-                    <div className="w-8 h-8 rounded-full border-4 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+                <div className="p-space-12 flex justify-center items-center bg-bg-surface border border-border-subtle rounded-2xl shadow-xl">
+                    <div className="w-8 h-8 rounded-full border-4 border-accent-primary/30 border-t-accent-primary animate-spin" />
                 </div>
             ) : meetingType === "INSTANT" && activeMeeting ? (
-                <div className="p-space-8 bg-gray-900 border border-emerald-500/50 rounded-2xl shadow-xl space-y-space-6 animate-in fade-in">
-                    <div className="flex items-center gap-space-4 border-b border-gray-800 pb-space-6">
+                <div className="p-space-8 bg-bg-surface border border-emerald-500/50 rounded-2xl shadow-xl space-y-space-6 animate-in fade-in">
+                    <div className="flex items-center gap-space-4 border-b border-border-subtle pb-space-6">
                         <div className="p-space-4 bg-emerald-500/20 text-emerald-400 rounded-2xl">
                             <Video className="w-8 h-8" />
                         </div>
                         <div>
-                            <h2 className="h2-premium text-white mb-space-1">{activeMeeting.title || "Phiên Họp Tức Thì"}</h2>
-                            <p className="body-premium text-gray-400">Host: {activeMeeting.owner?.name || activeMeeting.owner?.email || "Unknown"}</p>
+                            <h2 className="h2-premium text-text-main mb-space-1">{activeMeeting.title || "Phiên Họp Tức Thì"}</h2>
+                            <p className="body-premium text-text-muted">Host: {activeMeeting.owner?.name || activeMeeting.owner?.email || "Unknown"}</p>
                         </div>
                     </div>
                     
                     <div className="space-y-space-4">
-                        <p className="body-premium font-medium text-gray-300">Link tham gia cuộc họp:</p>
-                        <div className="p-space-4 bg-black/50 border border-gray-800 rounded-xl font-mono text-emerald-400 break-all select-all">
+                        <p className="body-premium font-medium text-text-muted">Link tham gia cuộc họp:</p>
+                        <div className="p-space-4 bg-bg-primary border border-border-subtle rounded-xl font-mono text-emerald-400 break-all select-all">
                             {activeMeeting.location || instantLink}
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-space-4 pt-space-4 border-t border-gray-800">
+                    <div className="flex flex-col md:flex-row gap-space-4 pt-space-4 border-t border-border-subtle">
                         <a href={activeMeeting.location || instantLink || "#"} target="_blank" rel="noreferrer" className="flex-1 px-space-6 py-space-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl transition shadow-[0_0_15px_rgba(16,185,129,0.3)] text-center flex items-center justify-center gap-space-2">
                             <Video className="w-5 h-5" /> Tham Gia Ngay
                         </a>
@@ -201,12 +201,12 @@ export default function CreateMeetingPage() {
                     </div>
                 </div>
             ) : (
-            <form onSubmit={handleSubmit} className="space-y-space-6 bg-gray-900 border border-gray-800 p-space-8 rounded-2xl shadow-xl">
+            <form onSubmit={handleSubmit} className="space-y-space-6 bg-bg-surface border border-border-subtle p-space-8 rounded-2xl shadow-xl">
                 <div className="space-y-space-4">
                     {/* Title */}
                     <div>
-                        <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
-                            <AlignLeft className="w-4 h-4 text-indigo-400" /> Tên Cuộc Họp {meetingType === "SCHEDULED" && "*"}
+                        <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
+                            <AlignLeft className="w-4 h-4 text-accent-primary" /> Tên Cuộc Họp {meetingType === "SCHEDULED" && "*"}
                         </label>
                         <input
                             required={meetingType === "SCHEDULED"}
@@ -214,13 +214,13 @@ export default function CreateMeetingPage() {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="Design Review, Product Sync..."
-                            className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white placeholder:text-gray-600 transition"
+                            className="w-full bg-bg-primary border border-border-subtle outline-none focus:ring-2 focus:ring-accent-primary/30 rounded-xl p-3.5 text-text-main placeholder:text-text-muted/50 transition"
                         />
                     </div>
 
                     {/* Participants */}
                     <div>
-                        <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                        <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                             <Users className="w-4 h-4 text-emerald-400" /> Người tham dự (Email)
                         </label>
                         <input
@@ -228,9 +228,9 @@ export default function CreateMeetingPage() {
                             value={participants}
                             onChange={(e) => setParticipants(e.target.value)}
                             placeholder="user1@example.com, john@remindly.com..."
-                            className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white placeholder:text-gray-600 transition"
+                            className="w-full bg-bg-primary border border-border-subtle outline-none focus:ring-2 focus:ring-accent-primary/30 rounded-xl p-3.5 text-text-main placeholder:text-text-muted/50 transition"
                         />
-                        <p className="caption-premium text-gray-500 mt-space-2">Ngăn cách các Email bằng dấu phẩy. Sẽ tự động gửi thư {meetingType === "INSTANT" ? "mời họp ngay" : "hẹn lịch"}.</p>
+                        <p className="caption-premium text-text-muted mt-space-2">Ngăn cách các Email bằng dấu phẩy. Sẽ tự động gửi thư {meetingType === "INSTANT" ? "mời họp ngay" : "hẹn lịch"}.</p>
                     </div>
 
                     {/* Component AI Phân Tích Lịch (Only for SCHEDULED) */}
@@ -243,7 +243,7 @@ export default function CreateMeetingPage() {
 
                     {/* Description */}
                     <div>
-                        <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2 mt-space-6">
+                        <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2 mt-space-6">
                             <AlignLeft className="w-4 h-4 text-blue-400" /> Mô tả ngắn gọn
                         </label>
                         <textarea
@@ -251,15 +251,15 @@ export default function CreateMeetingPage() {
                             onChange={(e) => setDescription(e.target.value)}
                             rows={3}
                             placeholder="Agenda cuộc họp..."
-                            className="w-full bg-gray-800 border-none outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-3.5 text-white placeholder:text-gray-600 transition resize-none"
+                            className="w-full bg-bg-primary border border-border-subtle outline-none focus:ring-2 focus:ring-accent-primary/30 rounded-xl p-3.5 text-text-main placeholder:text-text-muted/50 transition resize-none"
                         />
                     </div>
 
                     {meetingType === "SCHEDULED" && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-space-6 pt-space-2 border-t border-gray-800 mt-space-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-space-6 pt-space-2 border-t border-border-subtle mt-space-6">
                             {/* Date */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <CalendarIcon className="w-4 h-4 text-purple-400" /> Ngày tổ chức *
                             </label>
                             <CustomDatePicker
@@ -272,7 +272,7 @@ export default function CreateMeetingPage() {
 
                         {/* Start Time */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <Clock className="w-4 h-4 text-purple-400" /> Giờ bắt đầu *
                             </label>
                             <CustomTimePicker
@@ -285,7 +285,7 @@ export default function CreateMeetingPage() {
 
                         {/* End Time */}
                         <div>
-                            <label className="block body-premium font-medium text-gray-300 mb-space-2 flex items-center gap-space-2">
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2">
                                 <Clock className="w-4 h-4 text-purple-400" /> Giờ kết thúc *
                             </label>
                             <CustomTimePicker
@@ -299,7 +299,7 @@ export default function CreateMeetingPage() {
                     )}
                 </div>
 
-                <div className="pt-space-6 mt-space-6 border-t border-gray-800 flex items-center justify-end">
+                <div className="pt-space-6 mt-space-6 border-t border-border-subtle flex items-center justify-end">
                     {meetingType === "SCHEDULED" ? (
                         <button
                             type="submit"

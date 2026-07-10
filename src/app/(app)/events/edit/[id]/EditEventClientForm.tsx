@@ -59,7 +59,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
     }
 
     return (
-        <form action={handleUpdate} className="space-y-space-8 bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl">
+        <form action={handleUpdate} className="space-y-space-8 bg-bg-surface border border-border-subtle rounded-2xl p-space-6 md:p-space-8 shadow-xl">
             {error && (
                 <div className="p-space-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-sm flex gap-space-3 items-center animate-in fade-in">
                     <AlertCircle className="w-5 h-5 shrink-0" />
@@ -77,12 +77,12 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
             {/* Thông tin Cơ bản */}
             <div className={`space-y-space-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
                 <div>
-                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
+                    <label className="block body-premium font-medium text-text-muted mb-space-2">
                         Event Title
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FileEdit className="h-5 w-5 text-gray-500" />
+                            <FileEdit className="h-5 w-5 text-text-muted" />
                         </div>
                         <input
                             type="text"
@@ -90,26 +90,26 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                             defaultValue={initialData.title}
                             required
                             disabled={initialData.userRole === "ATTENDEE"}
-                            className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl pl-10 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-600 disabled:opacity-70 disabled:bg-gray-900"
+                            className="w-full bg-bg-primary border border-border-subtle text-text-main rounded-xl pl-10 pr-4 py-3 focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary transition-all placeholder:text-text-muted/50 disabled:opacity-70 disabled:bg-bg-surface"
                             placeholder="Design Review Meeting"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
+                    <label className="block body-premium font-medium text-text-muted mb-space-2">
                         Description
                     </label>
                     <div className="relative">
                         <div className="absolute top-3 left-3 pointer-events-none">
-                            <AlignLeft className="h-5 w-5 text-gray-500" />
+                            <AlignLeft className="h-5 w-5 text-text-muted" />
                         </div>
                         <textarea
                             name="description"
                             defaultValue={initialData.description}
                             rows={4}
                             disabled={initialData.userRole === "ATTENDEE"}
-                            className="w-full bg-gray-950 border border-gray-800 text-white rounded-xl pl-10 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-600 resize-none disabled:opacity-70 disabled:bg-gray-900"
+                            className="w-full bg-bg-primary border border-border-subtle text-text-main rounded-xl pl-10 pr-4 py-3 focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary transition-all placeholder:text-text-muted/50 resize-none disabled:opacity-70 disabled:bg-bg-surface"
                             placeholder="Add details, agendas, or links (Optional)"
                         />
                     </div>
@@ -139,7 +139,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                     </div>
                 </div>
                 <div>
-                    <label className="block body-premium font-medium text-gray-300 mb-space-2">
+                    <label className="block body-premium font-medium text-text-muted mb-space-2">
                         Category Tag
                     </label>
                     <CustomTagSelector 
@@ -151,13 +151,13 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
             </div>
 
             {/* Thời gian Setup */}
-            <div className={`bg-gray-950/50 rounded-2xl p-space-6 border border-gray-800 space-y-space-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
-                <h3 className="h3-premium text-white flex gap-space-2 items-center">
-                    <CalendarClock className="w-5 h-5 text-indigo-400" /> Time Setting
+            <div className={`bg-bg-primary/50 rounded-2xl p-space-6 border border-border-subtle space-y-space-6 ${initialData.userRole === "ATTENDEE" ? "opacity-60 pointer-events-none" : ""}`}>
+                <h3 className="h3-premium text-text-main flex gap-space-2 items-center">
+                    <CalendarClock className="w-5 h-5 text-accent-primary" /> Time Setting
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-space-6">
                     <div>
-                        <label className="block caption-premium text-gray-500 mb-space-1 uppercase tracking-wider font-semibold">Date</label>
+                        <label className="block caption-premium text-text-muted mb-space-1 uppercase tracking-wider font-semibold">Date</label>
                         <CustomDatePicker
                             name="date"
                             defaultValue={initialData.date}
@@ -166,7 +166,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                         />
                     </div>
                     <div>
-                        <label className="block caption-premium text-gray-500 mb-space-1 uppercase tracking-wider font-semibold">Start Time</label>
+                        <label className="block caption-premium text-text-muted mb-space-1 uppercase tracking-wider font-semibold">Start Time</label>
                         <CustomTimePicker 
                             name="startTime" 
                             defaultValue={initialData.startTime} 
@@ -175,7 +175,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                         />
                     </div>
                     <div>
-                        <label className="block caption-premium text-gray-500 mb-space-1 uppercase tracking-wider font-semibold">End Time</label>
+                        <label className="block caption-premium text-text-muted mb-space-1 uppercase tracking-wider font-semibold">End Time</label>
                         <CustomTimePicker 
                             name="endTime" 
                             defaultValue={initialData.endTime} 
@@ -187,13 +187,13 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
             </div>
 
             {/* Action Buttons Zone */}
-            <div className="pt-space-6 border-t border-gray-800 flex flex-col-reverse md:flex-row items-center justify-between gap-space-4">
+            <div className="pt-space-6 border-t border-border-subtle flex flex-col-reverse md:flex-row items-center justify-between gap-space-4">
                 <div className="flex gap-space-3 w-full md:w-auto">
                     <button
                         type="button"
                         onClick={() => router.back()}
                         disabled={isSubmitting || isDeleting}
-                        className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
+                        className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-bg-primary hover:bg-bg-surface border border-border-subtle text-text-main rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex cursor-pointer"
                     >
                         <ArrowLeft className="w-4 h-4" /> Go Back
                     </button>
@@ -220,7 +220,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                                     name="actionType"
                                     value="draft"
                                     disabled={isSubmitting || isDeleting}
-                                    className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
+                                    className="flex-1 md:flex-none justify-center items-center gap-space-2 px-space-6 py-space-3 bg-bg-primary hover:bg-bg-surface border border-border-subtle text-text-muted hover:text-text-main rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex cursor-pointer"
                                 >
                                     Keep Draft
                                 </button>
@@ -238,7 +238,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                         </>
                     ) : (
                         <div className="flex gap-space-2 items-center">
-                            <span className="text-xs text-gray-500 mr-2 uppercase tracking-wide font-semibold flex items-center gap-space-2">
+                            <span className="text-xs text-text-muted mr-2 uppercase tracking-wide font-semibold flex items-center gap-space-2">
                                 RSVP Status:
                                 <span className={`px-2 py-1 rounded text-[10px] font-bold ${
                                     initialData.currentRsvp === "ACCEPTED" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
@@ -277,7 +277,7 @@ export default function EditEventClientForm({ eventId, initialData }: EditFormPr
                                         router.refresh();
                                     }}
                                     disabled={isSubmitting}
-                                    className="px-space-6 py-space-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex"
+                                    className="px-space-6 py-space-2.5 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/20 rounded-xl text-sm font-medium transition disabled:opacity-50 inline-flex cursor-pointer"
                                 >
                                     {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null} Decline
                                 </button>

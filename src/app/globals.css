@@ -4,6 +4,13 @@
 :root {
   --background: #09090b; /* zinc-950 */
   --foreground: #fafafa; /* zinc-50 */
+
+  --bg-primary: #09090b;
+  --bg-surface: #111216;
+  --text-primary: #ffffff;
+  --text-muted: #9ca3af;
+  --border-subtle: #1f2024;
+  --accent-primary: #6366f1;
 }
 
 @theme inline {
@@ -11,6 +18,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-text-main: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-accent-primary: var(--accent-primary);
   
   /* Systemic Spacing Scale */
   --spacing-space-1: 4px;
@@ -115,6 +129,13 @@ h1, h2, h3, h4, h5, h6 {
 .theme-light {
   --background: #f8fafc; /* slate-50 background */
   --foreground: #0f172a; /* slate-900 text */
+  
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --border-subtle: #e2e8f0;
+  --accent-primary: #4f46e5;
   
   --color-gray-950: #f1f5f9; /* slate-100: Page Container BG */
   --color-gray-900: #ffffff; /* white: Card BG, Sidebar BG */

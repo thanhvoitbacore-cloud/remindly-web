@@ -131,25 +131,25 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
         <div className="space-y-space-10 pb-space-20">
 
             {/* Section 1: Profile */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl">
+            <section className="bg-bg-surface border border-border-subtle rounded-2xl p-space-6 md:p-space-8 shadow-xl">
                 <div className="flex items-center gap-space-3 mb-space-6">
-                    <User className="w-6 h-6 text-indigo-400" />
-                    <h2 className="h2-premium text-white">Public Profile</h2>
+                    <User className="w-6 h-6 text-accent-primary" />
+                    <h2 className="h2-premium text-text-main">Public Profile</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-space-6">
                     <div className="space-y-space-4">
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2">Display Name</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2">Display Name</label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full px-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-indigo-500 transition"
+                                className="w-full px-4 py-2.5 bg-bg-primary border border-border-subtle rounded-xl text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-accent-primary transition"
                             />
                         </div>
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2">Profile Picture</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2">Profile Picture</label>
                             <div className="relative">
                                 <input
                                     type="file"
@@ -160,7 +160,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                                 <button
                                     type="button"
                                     onClick={() => {}}
-                                    className="w-full flex items-center justify-center gap-space-2 px-space-4 py-space-2.5 bg-gray-950 border border-gray-800 hover:border-gray-700 rounded-xl text-gray-300 hover:text-white transition focus:outline-none focus:border-indigo-500"
+                                    className="w-full flex items-center justify-center gap-space-2 px-space-4 py-space-2.5 bg-bg-primary border border-border-subtle hover:border-text-muted rounded-xl text-text-muted hover:text-text-main transition focus:outline-none focus:border-accent-primary cursor-pointer"
                                 >
                                     <Upload className="w-4 h-4" />
                                     Choose Image...
@@ -169,18 +169,18 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center justify-center p-space-6 border-2 border-dashed border-gray-800 rounded-xl bg-gray-950/50 relative overflow-hidden group">
+                    <div className="flex flex-col items-center justify-center p-space-6 border-2 border-dashed border-border-subtle rounded-xl bg-bg-primary/50 relative overflow-hidden group">
                         {previewUrl ? (
                             <img src={previewUrl} alt="Avatar Preview" className="w-24 h-24 rounded-full object-cover border-4 border-indigo-500/20 shadow-lg" />
                         ) : (
-                            <div className="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center shadow-lg">
-                                <User className="w-10 h-10 text-gray-600" />
+                            <div className="w-24 h-24 rounded-full bg-bg-surface flex items-center justify-center shadow-lg">
+                                <User className="w-10 h-10 text-text-muted" />
                             </div>
                         )}
                         <div className="absolute inset-0 bg-black/50 invisible group-hover:visible flex items-center justify-center transition-all cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                             <Upload className="w-6 h-6 text-white" />
                         </div>
-                        <span className="caption-premium font-medium text-gray-500 mt-space-4 uppercase tracking-wider">Avatar Preview</span>
+                        <span className="caption-premium font-medium text-text-muted mt-space-4 uppercase tracking-wider">Avatar Preview</span>
                     </div>
                 </div>
 
@@ -188,7 +188,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                     <button
                         disabled={isUpdatingProfile}
                         onClick={handleProfileSubmit}
-                        className="px-space-6 py-space-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50"
+                        className="px-space-6 py-space-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50 cursor-pointer"
                     >
                         {isUpdatingProfile ? "Saving..." : "Save Profile"}
                     </button>
@@ -196,43 +196,43 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
             </section>
 
             {/* Section 2: Security */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl">
+            <section className="bg-bg-surface border border-border-subtle rounded-2xl p-space-6 md:p-space-8 shadow-xl">
                 <div className="flex items-center gap-space-3 mb-space-6">
                     <Shield className="w-6 h-6 text-emerald-400" />
-                    <h2 className="h2-premium text-white">Security & Identifiers</h2>
+                    <h2 className="h2-premium text-text-main">Security & Identifiers</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-8 gap-y-space-10">
 
                     {/* Unique Identifier Changes */}
                     <div className="space-y-space-6">
-                        <h3 className="caption-premium font-semibold uppercase tracking-wider text-gray-500">Primary Contact</h3>
+                        <h3 className="caption-premium font-semibold uppercase tracking-wider text-text-muted">Primary Contact</h3>
 
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2 flex items-center gap-space-2"><Mail className="w-4 h-4 text-gray-500" /> Email Address</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2"><Mail className="w-4 h-4 text-text-muted" /> Email Address</label>
                             <div className="flex gap-space-2">
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="flex-1 px-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 transition"
+                                    className="flex-1 px-4 py-2.5 bg-bg-primary border border-border-subtle rounded-xl text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-emerald-500 transition"
                                 />
-                                <button onClick={() => handleIdentifierRequest(email)} disabled={isSecurityLoading || email === initialUser.email} className="px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50">
+                                <button onClick={() => handleIdentifierRequest(email)} disabled={isSecurityLoading || email === initialUser.email} className="px-4 bg-bg-primary hover:bg-bg-surface text-text-muted border border-border-subtle rounded-xl text-sm font-medium transition disabled:opacity-50 cursor-pointer">
                                     Change
                                 </button>
                             </div>
                         </div>
 
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2 flex items-center gap-space-2"><Smartphone className="w-4 h-4 text-gray-500" /> Phone Number</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2"><Smartphone className="w-4 h-4 text-text-muted" /> Phone Number</label>
                             <div className="flex gap-space-2">
                                 <input
                                     type="tel"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
-                                    className="flex-1 px-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 transition"
+                                    className="flex-1 px-4 py-2.5 bg-bg-primary border border-border-subtle rounded-xl text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-emerald-500 transition"
                                 />
-                                <button onClick={() => handleIdentifierRequest(phone)} disabled={isSecurityLoading || phone === initialUser.phoneNumber} className="px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50">
+                                <button onClick={() => handleIdentifierRequest(phone)} disabled={isSecurityLoading || phone === initialUser.phoneNumber} className="px-4 bg-bg-primary hover:bg-bg-surface text-text-muted border border-border-subtle rounded-xl text-sm font-medium transition disabled:opacity-50 cursor-pointer">
                                     Change
                                 </button>
                             </div>
@@ -248,9 +248,9 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                                         placeholder="000000"
                                         value={otpCode}
                                         onChange={(e) => setOtpCode(e.target.value)}
-                                        className="w-full px-4 py-2 bg-gray-950/50 border border-emerald-500/30 rounded-lg text-emerald-100 placeholder:text-emerald-900/50 focus:outline-none font-mono tracking-widest text-center text-lg"
+                                        className="w-full px-4 py-2 bg-bg-primary/50 border border-emerald-500/30 rounded-lg text-emerald-100 placeholder:text-emerald-900/50 focus:outline-none font-mono tracking-widest text-center text-lg"
                                     />
-                                    <button onClick={handleIdentifierCommit} disabled={isSecurityLoading || otpCode.length < 5} className="px-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50">
+                                    <button onClick={handleIdentifierCommit} disabled={isSecurityLoading || otpCode.length < 5} className="px-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 cursor-pointer">
                                         Verify
                                     </button>
                                 </div>
@@ -260,33 +260,33 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
 
                     {/* Password Shift */}
                     <div className="space-y-space-6">
-                        <h3 className="caption-premium font-semibold uppercase tracking-wider text-gray-500">Authentication</h3>
+                        <h3 className="caption-premium font-semibold uppercase tracking-wider text-text-muted">Authentication</h3>
 
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2 flex items-center gap-space-2"><KeyRound className="w-4 h-4 text-gray-500" /> Current Password</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2 flex items-center gap-space-2"><KeyRound className="w-4 h-4 text-text-muted" /> Current Password</label>
                             <input
                                 type="password"
                                 value={oldPassword}
                                 onChange={(e) => setOldPassword(e.target.value)}
-                                className="w-full px-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 transition"
+                                className="w-full px-4 py-2.5 bg-bg-primary border border-border-subtle rounded-xl text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-emerald-500 transition"
                             />
                         </div>
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2">New Password</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2">New Password</label>
                             <input
                                 type="password"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
-                                className="w-full px-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 transition"
+                                className="w-full px-4 py-2.5 bg-bg-primary border border-border-subtle rounded-xl text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-emerald-500 transition"
                             />
                         </div>
                         <div>
-                            <label className="block body-premium font-medium text-gray-400 mb-space-2">Confirm New Password</label>
+                            <label className="block body-premium font-medium text-text-muted mb-space-2">Confirm New Password</label>
                             <input
                                 type="password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full px-4 py-2.5 bg-gray-950 border border-gray-800 rounded-xl text-gray-100 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 transition"
+                                className="w-full px-4 py-2.5 bg-bg-primary border border-border-subtle rounded-xl text-text-main placeholder:text-text-muted/50 focus:outline-none focus:border-emerald-500 transition"
                             />
                         </div>
 
@@ -294,7 +294,7 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
                             <button
                                 disabled={isPasswordLoading || !oldPassword || !newPassword}
                                 onClick={handlePasswordSubmit}
-                                className="px-space-6 py-space-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm font-medium transition disabled:opacity-50"
+                                className="px-space-6 py-space-2.5 bg-bg-primary hover:bg-bg-surface text-text-muted border border-border-subtle rounded-xl text-sm font-medium transition disabled:opacity-50 cursor-pointer"
                             >
                                 {isPasswordLoading ? "Updating..." : "Update Password"}
                             </button>
@@ -305,21 +305,21 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
             </section>
 
             {/* Section 3: Theme Preferences */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl mt-space-12">
+            <section className="bg-bg-surface border border-border-subtle rounded-2xl p-space-6 md:p-space-8 shadow-xl mt-space-12">
                 <div className="flex items-center gap-space-3 mb-space-6">
                     <Sun className="w-6 h-6 text-amber-400" />
-                    <h2 className="h2-premium text-white">Appearance</h2>
+                    <h2 className="h2-premium text-text-main">Appearance</h2>
                 </div>
 
-                <div className="p-space-6 bg-gray-950/50 border-l-4 border-amber-500/50 rounded-r-xl flex items-center justify-between">
+                <div className="p-space-6 bg-bg-primary/50 border border-border-subtle border-l-4 border-l-amber-500/50 rounded-r-xl flex items-center justify-between">
                     <div>
-                        <h3 className="h3-premium text-gray-200">Interface Theme</h3>
-                        <p className="body-premium text-gray-500 mt-space-1">Switch between Dark Mode and Light Mode.</p>
+                        <h3 className="h3-premium text-text-main">Interface Theme</h3>
+                        <p className="body-premium text-text-muted mt-space-1">Switch between Dark Mode and Light Mode.</p>
                     </div>
                     <div className="pl-6">
                         <button
                             onClick={toggleTheme}
-                            className="px-space-4 py-space-2 bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 hover:border-gray-600 rounded-xl text-sm font-medium transition flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                            className="px-space-4 py-space-2 bg-bg-primary hover:bg-bg-surface text-text-muted border border-border-subtle rounded-xl text-sm font-medium transition flex items-center gap-2 cursor-pointer whitespace-nowrap"
                         >
                             {theme === "dark" ? (
                                 <>
@@ -338,19 +338,19 @@ export default function SettingsForm({ initialUser }: { initialUser: UserData })
             </section>
 
             {/* Section 4: Account Actions */}
-            <section className="bg-gray-900 border border-gray-800 rounded-2xl p-space-6 md:p-space-8 shadow-xl mt-space-12 !border-red-500/20 relative overflow-hidden">
+            <section className="bg-bg-surface border border-border-subtle rounded-2xl p-space-6 md:p-space-8 shadow-xl mt-space-12 !border-red-500/20 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 rounded-full blur-3xl" />
 
                 <div className="relative">
                     <div className="flex items-center gap-space-3 mb-space-6">
                         <Settings2 className="w-6 h-6 text-red-400" />
-                        <h2 className="h2-premium text-white">Account Actions</h2>
+                        <h2 className="h2-premium text-text-main">Account Actions</h2>
                     </div>
 
-                    <div className="p-space-6 bg-gray-950/50 border-l-4 border-red-500/50 rounded-r-xl flex items-center justify-between">
+                    <div className="p-space-6 bg-bg-primary/50 border border-border-subtle border-l-4 border-l-red-500/50 rounded-r-xl flex items-center justify-between">
                         <div>
-                            <h3 className="h3-premium text-gray-200">Logout</h3>
-                            <p className="body-premium text-gray-500 mt-space-1">This will instantly sign you out of your account on this device. Protected pages will no longer be available until you authenticate again.</p>
+                            <h3 className="h3-premium text-text-main">Logout</h3>
+                            <p className="body-premium text-text-muted mt-space-1">This will instantly sign you out of your account on this device. Protected pages will no longer be available until you authenticate again.</p>
                         </div>
                         <div className="pl-6">
                             <LogoutButton />
