@@ -1,5 +1,3 @@
-import FluidCursor from '@/components/FluidCursor';
-
 export default function PublicLayout({
   children,
 }: {
@@ -7,7 +5,6 @@ export default function PublicLayout({
 }) {
   return (
     <>
-      <FluidCursor />
       {children}
     </>
   )

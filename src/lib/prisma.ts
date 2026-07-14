@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
 // Helper to generate UUIDs
 function generateUUID(): string {
@@ -31,8 +30,8 @@ const mockStore: {
 
 // Initialize Seed Data
 function seedDatabase() {
-  const adminPasswordHash = bcrypt.hashSync("2042001", 10);
-  const userPasswordHash = bcrypt.hashSync("password123", 10);
+  const adminPasswordHash = "$2b$10$ifVf86THRcPRfoZdfI.ZHuKcd6YQdtvZ50l4wo1sQcptBK74ZIfTe";
+  const userPasswordHash = "$2b$10$92.sruTK15BGCk86CFKT5OWS6zWjs/ecXHeX4EZAR2bafS50XmOR6";
 
   // Users
   const adminUser = {
